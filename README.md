@@ -1,4 +1,4 @@
-# DF-Driver
+# PKS-Driver
 
 Micro:bit motor drive expansion board.
 ---------------------------------------------------------
@@ -11,7 +11,7 @@ Micro:bit motor drive expansion board.
 * [License](#license)
 
 ## URL
-project URL:  ```https://github.com/DFRobot/pxt-motor```
+project URL:  ```https://github.com/peanut-king-solution/pks-pxt-shield```
 
 ## Summary
 Micro: bit motor driven expansion board is not only expanded the motor drive, in the integration of this extended board four motor driven, 2 road, on the basis of stepper motor driver, also raises the additional 8 road steering gear interface, IO port, 2 road 9 I2C interface.
@@ -20,28 +20,28 @@ The expansion board USES 3.5v ~ 5.5v power supply, 3.5mm plug and wiring two pow
 
 ## Blocks
 ### 1.Servo
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/1.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/1.png)
 
 ### 2.DC Motor
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/7.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/7.png)
 
 ### 3.Stepper-28
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/10.png)<br>
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/2.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/10.png)<br>
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/2.png)
 
 ### 4.Stepper-42
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/8.png)<br>
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/3.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/8.png)<br>
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/3.png)
 
 ### 5.Dual Stepper
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/5.png)<br>
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/9.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/5.png)<br>
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/9.png)
 
 ### 6.Stop the motor
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/6.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/6.png)
 
 ### 7.Stop all motors
-![image](https://github.com/DFRobot/pxt-motor/blob/master/image/4.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/4.png)
 
 
 ## License
