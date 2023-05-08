@@ -53,5 +53,5 @@ GNU
 * for PXT/microbit
 (The metadata above is needed for package search.)
 ```package
-gamePad=github:DFRobot/pxt-motor
+gamePad=github:peanut-king-solution/pks-pxt-shield
 ```
