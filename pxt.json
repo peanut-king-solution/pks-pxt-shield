@@ -10,7 +10,8 @@
         "README.md",
         "motors.ts",
         "_locales/zh/motor-strings.json",
-        "dht11.ts"
+        "dht11.ts",
+        "max7219.ts"
     ],
     "testFiles": [
         "test.ts"
