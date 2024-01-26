@@ -11,7 +11,8 @@
         "motors.ts",
         "_locales/zh/motor-strings.json",
         "dht11.ts",
-        "max7219.ts"
+        "max7219.ts",
+        "mpu6050.ts"
     ],
     "testFiles": [
         "test.ts"
