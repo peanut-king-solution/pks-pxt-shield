@@ -16,7 +16,7 @@
 /**
  *This is PKSRobot:motor user motor and steering control function.
  */
-//% weight=10 color=#1c4980 icon="\ue5eb" block="PKS-Driver"
+//% weight=10 color=#1c4980 icon="\ue5eb" block="Motors"
 namespace motor {
     const PCA9685_ADDRESS = 0x40
     const MODE1 = 0x00
