@@ -1,7 +1,7 @@
 {
-    "name": "motor",
+    "name": "PKS Driver",
     "version": "1.0.0",
-    "description": "This is a DC motor, stepper motor, steering gear library.",
+    "description": "This is a library for PKS products.",
     "license": "GNU",
     "dependencies": {
         "core": "*"
