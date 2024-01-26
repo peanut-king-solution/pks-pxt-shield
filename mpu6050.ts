@@ -38,7 +38,7 @@ enum gyroSen {
     range_2000_dps
 }
 
-//% color="#FFBF00" icon="\uf12e" weight=70
+//% color="#FFBF00" icon="\uf12e" weight=70 block="MPU6050"
 namespace Brickcell {
     let i2cAddress = 0x68;
     let power_mgmt = 0x6b;
@@ -137,8 +137,6 @@ namespace Brickcell {
      * Initialize MPU6050
      */
     //% block="Initialize MPU6050"
-    //% weight=100
-    //% subcategory="gyro mpu6050"
     export function initMPU6050() {
         let buffer = pins.createBuffer(2);
         buffer[0] = power_mgmt;
@@ -150,8 +148,6 @@ namespace Brickcell {
       * Get gyroscope values
       */
     //% block="Gyroscope value of %axisXYZ axis with %gyroSen sensitivity (Unit: rad/s)"
-    //%weight=95
-    //% subcategory="gyro mpu6050"
     export function gyroscope(axis: axisXYZ, sensitivity: gyroSen) {
         updateGyroscope(sensitivity);
         if (axis == axisXYZ.x) {
@@ -169,8 +165,6 @@ namespace Brickcell {
      * Get rotation of the corresponding Axis
      */
     //% block="Angle of %xaxisXYZ axis with %accelSen sensitivity (Unit: Degrees)"
-    //% weight=90
-    //% subcategory="gyro mpu6050"
     export function axisRotation(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
 
@@ -195,8 +189,6 @@ namespace Brickcell {
      * Get acceleration of the corresponding Axis
      */
     //% block="Acceleration of %xaxisXYZ axis with %accelSen sensitivity (Unit: g)"
-    //% weight=85
-    //% subcategory="gyro mpu6050"
     export function axisAcceleration(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
         // Return acceleration of specific axis
@@ -215,8 +207,6 @@ namespace Brickcell {
      * Get temperature
      */
     //% block="Temperature (Unit: Celsius)"
-    //% weight=80
-    //% subcategory="gyro mpu6050"
     export function readTemperature(): number {
         let rawTemp = readData(tempAddr);
         return 36.53 + rawTemp / 340;
