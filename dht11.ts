@@ -56,8 +56,8 @@ namespace dht11_dht22 {
         for (let index = 0; index < 40; index++) dataArray.push(false)
         for (let index = 0; index < 5; index++) resultArray.push(0)
 
-        _humidity = -999.0
-        _temperature = -999.0
+        // _humidity = -999.0
+        // _temperature = -999.0
         _readSuccessful = false
         _sensorresponding = false
         startTime = input.runningTimeMicros()
