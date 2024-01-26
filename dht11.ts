@@ -134,7 +134,9 @@ namespace dht11_dht22 {
                     serial.writeLine("Humidity: " + _humidity + " %")
                     serial.writeLine("Temperature: " + _temperature + (_temptype == tempType.celsius ? " *C" : " *F"))
                 } else {
-                    serial.writeLine("Checksum error")
+                    serial.writeLine("Checksum error, showing old values")
+                    serial.writeLine("Humidity: " + _humidity + " %")
+                    serial.writeLine("Temperature: " + _temperature + (_temptype == tempType.celsius ? " *C" : " *F"))
                 }
                 serial.writeLine("----------------------------------------")
             }
