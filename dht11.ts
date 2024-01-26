@@ -24,7 +24,7 @@ enum tempType {
     fahrenheit,
 }
 
-//% block="DHT11/DHT22" weight=100 color=#ff8f3f icon="\uf043"
+//% block="PKS - temperature sensor" weight=100 color=#ff8f3f icon="\uf043"
 namespace dht11_dht22 {
 
     let _temperature: number = -999.0

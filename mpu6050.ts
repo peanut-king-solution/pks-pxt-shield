@@ -38,7 +38,7 @@ enum gyroSen {
     range_2000_dps
 }
 
-//% color="#FFBF00" icon="\uf12e" weight=70 block="MPU6050"
+//% color="#FFBF00" icon="\uf12e" weight=70 block="PKS - gyroscope"
 namespace Brickcell {
     let i2cAddress = 0x68;
     let power_mgmt = 0x6b;

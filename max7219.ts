@@ -3,7 +3,7 @@
  * by Alan Wang
  */
 
-//% weight=100 color=#006d19 icon="\uf00a" block="MAX7219 8x8"
+//% weight=100 color=#006d19 icon="\uf00a" block="PKS - LED matrix"
 namespace max7219_matrix {
 
     //Registers (command) for MAX7219
