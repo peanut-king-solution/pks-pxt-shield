@@ -307,13 +307,6 @@ namespace motor {
     }
 
 
-    let _temperature: number = -999.0
-    let _humidity: number = -999.0
-    let _temptype: tempType = tempType.celsius
-    let _readSuccessful: boolean = false
-    let _sensorresponding: boolean = false
-
-
     enum DHTtype {
         //% block="DHT11"
         DHT11,
@@ -334,6 +327,12 @@ namespace motor {
         //% block="Fahrenheit (*F)"
         fahrenheit,
     }
+    let _temperature: number = -999.0
+    let _humidity: number = -999.0
+    let _temptype: tempType = tempType.celsius
+    let _readSuccessful: boolean = false
+    let _sensorresponding: boolean = false
+    
     /**
     * Query data from DHT11/DHT22 sensor. If you are using 4 pins/no PCB board versions, you'll need to pull up the data pin. 
     * It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
