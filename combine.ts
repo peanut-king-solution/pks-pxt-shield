@@ -615,7 +615,7 @@ namespace pksdriver {
      * S1~S8.
      * 0°~180°.
     */
-    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="motors"
+    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="shield"
     //% weight=100
     //% degree.min=0 degree.max=180
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
@@ -635,7 +635,7 @@ namespace pksdriver {
      * speed(0~255).
     */
     //% weight=90
-    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="motors"
+    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="shield"
     //% speed.min=0 speed.max=255
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
@@ -663,11 +663,46 @@ namespace pksdriver {
         }
     }
 
+    //% weight=90
+    //% blockId=light_lighton block="Light On|%index" subcategory="shield"
+    export function LightOn(index: Motors): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        let speed = 255
+        speed = speed * 16 * 1; // map 255 to 4096
+        if (speed >= 4096) {
+            speed = 4095
+        }
+        if (speed <= -4096) {
+            speed = -4095
+        }
+        if (index > 4 || index <= 0)
+            return
+        let pn = (4 - index) * 2
+        let pp = (4 - index) * 2 + 1
+        if (speed >= 0) {
+            setPwm(pp, 0, speed)
+            setPwm(pn, 0, 0)
+        } else {
+            setPwm(pp, 0, 0)
+            setPwm(pn, 0, -speed)
+        }
+    }
+
+    //% weight=90
+    //% blockId=light_lightoff block="Light Off|%index" subcategory="shield"
+    export function LightOff(index: Motors) {
+        setPwm((4 - index) * 2, 0, 0);
+        setPwm((4 - index) * 2 + 1, 0, 0);
+    }
+
+
     /**
      * Stop the dc motor.
     */
     //% weight=20
-    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="motors"
+    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="shield"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function motorStop(index: Motors) {
         setPwm((4 - index) * 2, 0, 0);
@@ -678,7 +713,7 @@ namespace pksdriver {
      * Stop all motors
     */
     //% weight=10
-    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="motors"
+    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="shield"
     export function motorStopAll(): void {
         for (let idx = 1; idx <= 4; idx++) {
             motorStop(idx);
