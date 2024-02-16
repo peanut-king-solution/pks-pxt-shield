@@ -284,7 +284,7 @@ namespace DS1302 {
         /**
          * get Year
          */
-        //% blockId="DS1302_get_year" block="%ds|get year"
+        //% blockId="DS1302_get_year" block="%ds|get year" subcategory="Hydroponic"
         //% weight=80 blockGap=8
         //% parts="DS1302"
         getYear(): number {
@@ -295,7 +295,7 @@ namespace DS1302 {
          * set year
          * @param dat is the Year will be set, eg: 2018
          */
-        //% blockId="DS1302_set_year" block="%ds|set year %dat"
+        //% blockId="DS1302_set_year" block="%ds|set year %dat" subcategory="Hydroponic"
         //% weight=81 blockGap=8
         //% parts="DS1302"
         setYear(dat: number): void {
@@ -305,7 +305,7 @@ namespace DS1302 {
         /**
          * get Month
          */
-        //% blockId="DS1302_get_month" block="%ds|get month"
+        //% blockId="DS1302_get_month" block="%ds|get month" subcategory="Hydroponic"
         //% weight=78 blockGap=8
         //% parts="DS1302"
         getMonth(): number {
@@ -316,7 +316,7 @@ namespace DS1302 {
          * set month
          * @param dat is Month will be set.  eg: 2
          */
-        //% blockId="DS1302_set_month" block="%ds|set month %dat"
+        //% blockId="DS1302_set_month" block="%ds|set month %dat" subcategory="Hydroponic"
         //% weight=79 blockGap=8
         //% parts="DS1302"
         //% dat.min=1 dat.max=12
@@ -327,7 +327,7 @@ namespace DS1302 {
         /**
          * get Day
          */
-        //% blockId="DS1302_get_day" block="%ds|get day"
+        //% blockId="DS1302_get_day" block="%ds|get day" subcategory="Hydroponic"
         //% weight=76 blockGap=8
         //% parts="DS1302"
         getDay(): number {
@@ -338,7 +338,7 @@ namespace DS1302 {
          * set day
          * @param dat is the Day will be set, eg: 15
          */
-        //% blockId="DS1302_set_day" block="%ds|set day %dat"
+        //% blockId="DS1302_set_day" block="%ds|set day %dat" subcategory="Hydroponic"
         //% weight=77 blockGap=8
         //% parts="DS1302"
         //% dat.min=1 dat.max=31
@@ -349,7 +349,7 @@ namespace DS1302 {
         /**
          * get Week Day
          */
-        //% blockId="DS1302_get_weekday" block="%ds|get weekday"
+        //% blockId="DS1302_get_weekday" block="%ds|get weekday" subcategory="Hydroponic"
         //% weight=74 blockGap=8
         //% parts="DS1302"
         getWeekday(): number {
@@ -360,7 +360,7 @@ namespace DS1302 {
          * set weekday
          * @param dat is the Week Day will be set, eg: 4
          */
-        //% blockId="DS1302_set_weekday" block="%ds|set weekday %dat"
+        //% blockId="DS1302_set_weekday" block="%ds|set weekday %dat" subcategory="Hydroponic"
         //% weight=75 blockGap=8
         //% parts="DS1302"
         //% dat.min=1 dat.max=7
@@ -371,7 +371,7 @@ namespace DS1302 {
         /**
          * get Hour
          */
-        //% blockId="DS1302_get_hour" block="%ds|get hour"
+        //% blockId="DS1302_get_hour" block="%ds|get hour" subcategory="Hydroponic"
         //% weight=72 blockGap=8
         //% parts="DS1302"
         getHour(): number {
@@ -382,7 +382,7 @@ namespace DS1302 {
          * set hour
          * @param dat is the Hour will be set, eg: 0
          */
-        //% blockId="DS1302_set_hour" block="%ds|set hour %dat"
+        //% blockId="DS1302_set_hour" block="%ds|set hour %dat" subcategory="Hydroponic"
         //% weight=73 blockGap=8
         //% parts="DS1302"
         //% dat.min=0 dat.max=23
@@ -393,7 +393,7 @@ namespace DS1302 {
         /**
          * get Minute
          */
-        //% blockId="DS1302_get_minute" block="%ds|get minute"
+        //% blockId="DS1302_get_minute" block="%ds|get minute" subcategory="Hydroponic"
         //% weight=72 blockGap=8
         //% parts="DS1302"
         getMinute(): number {
@@ -404,7 +404,7 @@ namespace DS1302 {
          * set minute
          * @param dat is the Minute will be set, eg: 0
          */
-        //% blockId="DS1302_set_minute" block="%ds|set minute %dat"
+        //% blockId="DS1302_set_minute" block="%ds|set minute %dat" subcategory="Hydroponic"
         //% weight=71 blockGap=8
         //% parts="DS1302"
         //% dat.min=0 dat.max=59
@@ -415,7 +415,7 @@ namespace DS1302 {
         /**
          * get Second
          */
-        //% blockId="DS1302_get_second" block="%ds|get second"
+        //% blockId="DS1302_get_second" block="%ds|get second" subcategory="Hydroponic"
         //% weight=70 blockGap=8
         //% parts="DS1302"
         getSecond(): number {
@@ -426,7 +426,7 @@ namespace DS1302 {
          * set second
          * @param dat is the Second will be set, eg: 0
          */
-        //% blockId="DS1302_set_second" block="%ds|set second %dat"
+        //% blockId="DS1302_set_second" block="%ds|set second %dat" subcategory="Hydroponic"
         //% weight=69 blockGap=8
         //% parts="DS1302"
         //% dat.min=0 dat.max=59
@@ -444,7 +444,7 @@ namespace DS1302 {
          * @param minute is the Minute will be set, eg: 0
          * @param second is the Second will be set, eg: 0
          */
-        //% blockId="DS1302_set_DateTime" block="%ds|set Date and Time: Year %year|Month %month|Day %day|WeekDay %weekday|Hour %hour|Minute %minute|Second %second"
+        //% blockId="DS1302_set_DateTime" block="%ds|set Date and Time: Year %year|Month %month|Day %day|WeekDay %weekday|Hour %hour|Minute %minute|Second %second" subcategory="Hydroponic"
         //% weight=50 blockGap=8
         //% parts="DS1302"
         //% year.min=2000 year.max=2100
@@ -467,7 +467,7 @@ namespace DS1302 {
         /**
          * start ds1302 RTC (go on)
          */
-        //% blockId="DS1302_start" block="%ds|start RTC"
+        //% blockId="DS1302_start" block="%ds|start RTC" subcategory="Hydroponic"
         //% weight=41 blockGap=8
         //% parts="DS1302"
         start() {
@@ -478,7 +478,7 @@ namespace DS1302 {
         /**
          * pause ds1302 RTC
          */
-        //% blockId="DS1302_pause" block="%ds|pause RTC"
+        //% blockId="DS1302_pause" block="%ds|pause RTC" subcategory="Hydroponic"
         //% weight=40 blockGap=8
         //% parts="DS1302"
         pause() {
@@ -489,7 +489,7 @@ namespace DS1302 {
         /**
          * read RAM
          */
-        //% blockId="DS1302_read_ram" block="%ds|read ram %reg"
+        //% blockId="DS1302_read_ram" block="%ds|read ram %reg" subcategory="Hydroponic"
         //% weight=43 blockGap=8
         //% parts="DS1302"
         //% reg.min=0 reg.max=30
@@ -500,7 +500,7 @@ namespace DS1302 {
         /**
          * write RAM
          */
-        //% blockId="DS1302_write_ram" block="%ds|write ram %reg|with %dat"
+        //% blockId="DS1302_write_ram" block="%ds|write ram %reg|with %dat" subcategory="Hydroponic"
         //% weight=42 blockGap=8
         //% parts="DS1302"
         //% reg.min=0 reg.max=30
@@ -516,7 +516,7 @@ namespace DS1302 {
      * @param cs the CS pin for DS1302, eg: DigitalPin.P15
      */
     //% weight=200 blockGap=8
-    //% blockId="DS1302_create" block="CLK %clk|DIO %dio|CS %cs"
+    //% blockId="DS1302_create" block="CLK %clk|DIO %dio|CS %cs" subcategory="Hydroponic"
     export function create(clk: DigitalPin, dio: DigitalPin, cs: DigitalPin): DS1302RTC {
         let ds = new DS1302RTC();
         ds.clk = clk;
