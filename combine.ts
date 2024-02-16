@@ -282,7 +282,7 @@ namespace pksdriver {
          * get Year
          */
         //% blockId="DS1302_get_year" block="%ds|get year" subcategory="Hydroponic"
-        //% group="Motor" weight=53
+        //% group="Motor" weight=90
         //% weight=80 blockGap=8
         //% parts="DS1302"
         getYear(): number {
