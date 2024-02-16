@@ -188,10 +188,6 @@ namespace pksdriver {
 * http://www.micropython.org.cn
 */
 
-/**
- * DS1302 block
- */
-//% weight=100 color=#A040E0 icon="\uf017" block="RTC DS1302"
 namespace DS1302 {
     let DS1302_REG_SECOND = 0x80
     let DS1302_REG_MINUTE = 0x82
