@@ -250,12 +250,19 @@ namespace motor {
         setPwm(index + 7, 0, value)
     }
 	
-    export function servo(index: Servos): void {
+    /**
+     * set servo to zero
+    */
+    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
+    //% weight=99
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servoOff(index: Servos): void {
         if (!initialized) {
             initPCA9685()
         }
         setPwm(index + 7, 0, 0)
     }
+
 
     /**
 	 * Execute a motor
