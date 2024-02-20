@@ -990,7 +990,7 @@ namespace pksdriver {
     //% blockId=motor_servoOn block="ServoOn|%index" subcategory="shield"
     //% weight=98
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function servoOff(index: Servos): void {
+    export function servoOn(index: Servos): void {
         if (!initialized) {
             initPCA9685()
         }
