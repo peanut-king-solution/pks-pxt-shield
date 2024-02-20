@@ -249,6 +249,13 @@ namespace motor {
         let value = v_us * 4096 / 20000
         setPwm(index + 7, 0, value)
     }
+	
+    export function servo(index: Servos): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setPwm(index + 7, 0, 0)
+    }
 
     /**
 	 * Execute a motor
