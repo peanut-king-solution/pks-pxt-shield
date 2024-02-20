@@ -975,7 +975,7 @@ namespace pksdriver {
      * set servo off
     */
     //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
-    //% weight=99
+    //% weight=110
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOff(index: Servos): void {
         if (!initialized) {
@@ -988,7 +988,7 @@ namespace pksdriver {
      * set servo on
     */
     //% blockId=motor_servoOn block="ServoOn|%index" subcategory="shield"
-    //% weight=98
+    //% weight=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOn(index: Servos): void {
         if (!initialized) {
