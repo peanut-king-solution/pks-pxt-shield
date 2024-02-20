@@ -972,6 +972,19 @@ namespace pksdriver {
     }
 
     /**
+     * set servo to zero
+    */
+    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
+    //% weight=99
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servoOff(index: Servos): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setPwm(index + 7, 0, 0)
+    }
+
+    /**
      * Execute a motor
      * M1~M4.
      * speed(0~255).
@@ -1062,18 +1075,7 @@ namespace pksdriver {
         }
     }
 
-    /**
-     * set servo to zero
-    */
-    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
-    //% weight=99
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function servoOff(index: Servos): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        setPwm(index + 7, 0, 0)
-    }
+
 
 }
 
