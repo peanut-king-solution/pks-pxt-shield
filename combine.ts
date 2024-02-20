@@ -971,13 +971,6 @@ namespace pksdriver {
         setPwm(index + 7, 0, value)
     }
 
-    export function servoOff(index: Servos): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        setPwm(index + 7, 0, 0)
-    }
-
     /**
      * Execute a motor
      * M1~M4.
@@ -1067,6 +1060,19 @@ namespace pksdriver {
         for (let idx = 1; idx <= 4; idx++) {
             motorStop(idx);
         }
+    }
+
+    /**
+     * set servo to zero
+    */
+    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
+    //% weight=99
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servoOff(index: Servos): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setPwm(index + 7, 0, 0)
     }
 
 }
