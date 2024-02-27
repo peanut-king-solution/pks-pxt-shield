@@ -1021,6 +1021,43 @@ namespace pksdriver {
         }
     }
 
+    //% weight=80
+    //% blockId=light_lighton_intensity block="Light|%index|intensity|%intensity" subcategory="Hydroponic"
+    //% intensity.min=0 intensity.max=4
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
+    export function LightOnIntesity(index: Motors): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        let intensity = 4
+        if (intensity = 0) {
+            speed = 0
+        }
+        if (intensity = 1) {
+            speed = 1024    
+        }
+        if (intensity = 2) {
+            speed = 2048
+        }
+        if (intensity = 3) {
+            speed = 3072
+        }
+        if (intensity = 4) {
+            speed = 4095
+        }
+        if (index > 4 || index <= 0)
+            return
+        let pn = (4 - index) * 2
+        let pp = (4 - index) * 2 + 1
+        if (speed >= 0) {
+            setPwm(pp, 0, speed)
+            setPwm(pn, 0, 0)
+        } else {
+            setPwm(pp, 0, 0)
+            setPwm(pn, 0, -speed)
+        }
+    }
+
     //% weight=90
     //% blockId=light_lighton block="Light On|%index" subcategory="shield"
     export function LightOn(index: Motors): void {
