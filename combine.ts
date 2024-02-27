@@ -1,8 +1,3 @@
-/**
- * MakeCode editor extension for DHT11 and DHT22 humidity/temperature sensors
- * by Alan Wang
- */
-
 enum DHTtype {
     //% block="DHT11"
     DHT11,
@@ -182,11 +177,6 @@ namespace pksdriver {
     }
 
 }
-/**
-* makecode DS1302 RTC Package.
-* From microbit/micropython Chinese community.
-* http://www.micropython.org.cn
-*/
 
 //% weight=100 color=#A040E0 icon="\uf017" block="PKS drivers"
 namespace pksdriver {
