@@ -1059,7 +1059,7 @@ namespace pksdriver {
     }
     
     //% weight=90
-    //% blockId=light_lightonintensity block="Light|%index|intensity|%intensity" subcategory="shield"
+    //% blockId=light_lightonintensity block="Light|%index|intensity|%intensity" subcategory="Hydroponic"
     //% intensity.min=0 intensity.max=4
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function LightOnIntesity(index: Motors): void {
