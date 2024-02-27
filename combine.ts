@@ -1059,7 +1059,9 @@ namespace pksdriver {
     }
     
     //% weight=90
-    //% blockId=light_lighton block="Light On|%index" subcategory="shield"
+    //% blockId=light_lightonintensity block="Light|%index|intensity|%intensity" subcategory="shield"
+    //% intensity.min=0 intensity.max=4
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function LightOnIntesity(index: Motors): void {
         if (!initialized) {
             initPCA9685()
