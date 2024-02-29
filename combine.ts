@@ -1033,18 +1033,19 @@ namespace pksdriver {
         if (intensity = 0) {
             speed = 0
         } 
-        if (intensity = 1) {
+        else (intensity = 1) {
             speed = 1024 
         }
-        if (intensity = 2) {
+        else (intensity = 2) {
             speed = 2048
         }
-        if (intensity = 3) {
+        else (intensity = 3) {
             speed = 3072
         }
-        if (intensity = 4) {
+        else (intensity = 4) {
             speed = 4095
-        }      
+        } 
+        
         if (index > 4 || index <= 0)
             return
         let pn = (4 - index) * 2
