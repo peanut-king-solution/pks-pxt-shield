@@ -1044,10 +1044,7 @@ namespace pksdriver {
         }
         if (intensity = 4) {
             speed = 4095
-        }
-        if (index > 4 || index <= 0)
-            return
-        
+        }      
         setPwm(pp, 0, speed)
     }
 
