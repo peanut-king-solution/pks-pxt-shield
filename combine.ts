@@ -1031,22 +1031,20 @@ namespace pksdriver {
         }
         let intensity = 4
         if (intensity = 0) {
-            speed = 0
+            setPwm(0, 0, 0)
         }
         if (intensity = 1) {
-            speed = 1024    
+            setPwm(0, 0, 1024)  
         }
         if (intensity = 2) {
-            speed = 2048
+            setPwm(0, 0, 2048)
         }
         if (intensity = 3) {
-            speed = 3072
+            setPwm(0, 0, 3072)
         }
         if (intensity = 4) {
-            speed = 4095
+            setPwm(0, 0, 4095)
         }      
-        setPwm(pp, 0, speed)
-    }
 
     //% weight=90
     //% blockId=light_lighton block="Light On|%index" subcategory="shield"
