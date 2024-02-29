@@ -1033,16 +1033,16 @@ namespace pksdriver {
         if (intensity = 0) {
             speed = 0
         } 
-        else (intensity = 1) {
+        else if(intensity = 1) {
             speed = 1024 
         }
-        else (intensity = 2) {
+        else if(intensity = 2) {
             speed = 2048
         }
-        else (intensity = 3) {
+        else if(intensity = 3) {
             speed = 3072
         }
-        else (intensity = 4) {
+        else if(intensity = 4) {
             speed = 4095
         } 
         
