@@ -1025,10 +1025,11 @@ namespace pksdriver {
     //% blockId=light_lighton_intensity block="Light|%index|intensity|%intensity" subcategory="shield"
     //% intensity.min=0 intensity.max=4
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function LightOnIntesity(index: Motors, intensity: number, speed: number): void {
+    export function LightOnIntesity(index: Motors, intensity: number): void {
         if (!initialized) {
             initPCA9685()
         }
+        let speed = 0
         if (intensity = 0) {
             speed = 0
         } 
