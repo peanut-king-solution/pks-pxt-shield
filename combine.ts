@@ -1155,10 +1155,9 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye|$compound_eye_data"  subcategory="shield"
+    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="shield"
     //% weight=100
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function compoundEyeRead (compound_eye_data: number):number {
+    export function compoundEyeRead (compound_eye_data: compound_eye_data):number {
 	pins.i2cWriteNumber(
 	19,
 	compound_eye_data,
