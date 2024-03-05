@@ -1117,7 +1117,7 @@ namespace pksdriver {
         }
     }
 
-    enum compound_eye_data{
+    enum compoundEyeData{
         //% block="eye_1"
         ir_1:0,
         //% block="eye_2"
@@ -1155,9 +1155,9 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye $compound_eye_data|"  subcategory="shield"
+    //% blockId=compoundEye block="CompoundEye $compoundEyeData|"  subcategory="shield"
     //% weight=100
-    export function compoundEyeRead (compound_eye_data: compound_eye_data):number {
+    export function compoundEyeRead (compound_eye_data: compoundEyeData):number {
 	pins.i2cWriteNumber(
 	19,
 	compound_eye_data,
