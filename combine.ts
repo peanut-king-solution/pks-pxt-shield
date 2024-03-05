@@ -1155,7 +1155,7 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye|%compound_eye_data"
+    //% blockId=compoundEye block="CompoundEye|%compound_eye_data"  subcategory="shield"
     //% weight=100
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function compoundEyeRead (compound_eye_data: number):number {
