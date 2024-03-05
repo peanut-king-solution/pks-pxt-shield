@@ -1117,7 +1117,7 @@ namespace pksdriver {
         }
     }
 
-    enum comconst compound_eye_data{
+    enum compound_eye_data{
         //% block="eye_1"
         ir_1:0,
         //% block="eye_2"
@@ -1155,7 +1155,7 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye|%index"
+    //% blockId=compoundEye block="CompoundEye|%compound_eye_data"
     //% weight=100
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function compoundEyeRead (compound_eye_data: number):number {
