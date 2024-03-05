@@ -1117,7 +1117,7 @@ namespace pksdriver {
         }
     }
 
-    enum compoundEyeData{
+    export enum compoundEyeData{
         //% block="eye_1"
         ir_1:0,
         //% block="eye_2"
