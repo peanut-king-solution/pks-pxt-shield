@@ -1119,40 +1119,40 @@ namespace pksdriver {
 
     export enum compoundEyeData{
         //% block="eye_1"
-        ir_1=0,
+        ir_1,
         //% block="eye_2"
-        ir_2=1,
+        ir_2,
         //% block="eye_3"
-        ir_3=2,
+        ir_3,
         //% block="eye_4"
-        ir_4=3,
+        ir_4,
         //% block="eye_5"
-        ir_5=4,
+        ir_5,
         //% block="eye_6"
-        ir_6=5,
+        ir_6,
         //% block="eye_7"
-        ir_7=6,
+        ir_7,
         //% block="eye_8"
-        ir_8=7,
+        ir_8,
         //% block="eye_9"
-        ir_9=8,
+        ir_9,
         //% block="eye_10"
-        ir_10=9,
+        ir_10,
         //% block="eye_11"
-        ir_11=10,
+        ir_11,
         //% block="eye_12"
-        ir_12=11,
+        ir_12,
         //% block="max_eye_value"
 	//% weight=99
-        max_eye_value=12,
+        max_eye_value,
         //% block="max_eye"
 	//% weight=100
-        max_eye=13,
+        max_eye,
         //% block="angle"
 	//% weight=98
-        angle=14,
+        angle,
         //% block="mode"
-        mode=15,
+        mode,
     }
 
     /**
