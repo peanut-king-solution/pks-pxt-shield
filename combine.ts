@@ -1143,10 +1143,13 @@ namespace pksdriver {
         //% block="eye_12"
         ir_12=11,
         //% block="max_eye_value"
+	//% weight=99
         max_eye_value=12,
         //% block="max_eye"
+	//% weight=100
         max_eye=13,
         //% block="angle"
+	//% weight=98
         angle=14,
         //% block="mode"
         mode=15,
