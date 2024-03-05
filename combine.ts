@@ -1162,12 +1162,12 @@ namespace pksdriver {
     //% weight=100
     export function compoundEyeRead (compound_eye_data: compoundEyeData):number {
 	pins.i2cWriteNumber(
-	19,
+	0x13,
 	compound_eye_data,
 	NumberFormat.UInt8LE,
 	false
 	)
-	return pins.i2cReadNumber(19, NumberFormat.UInt8LE, false)
+	return pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false)
      }
 
 
