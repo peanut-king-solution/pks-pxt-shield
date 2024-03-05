@@ -19,6 +19,7 @@ enum tempType {
     fahrenheit,
 }
 
+
 //% block="PKS drivers" weight=60s color=#ff8f3f
 namespace pksdriver {
 
@@ -1115,6 +1116,59 @@ namespace pksdriver {
             motorStop(idx);
         }
     }
+
+    enum comconst compound_eye_data{
+        //% block="eye_1"
+        ir_1:0,
+        //% block="eye_2"
+        ir_2:1,
+        //% block="eye_3"
+        ir_3:2,
+        //% block="eye_4"
+        ir_4:3,
+        //% block="eye_5"
+        ir_5:4,
+        //% block="eye_6"
+        ir_6:5,
+        //% block="eye_7"
+        ir_7:6,
+        //% block="eye_8"
+        ir_8:7,
+        //% block="eye_9"
+        ir_9:8,
+        //% block="eye_10"
+        ir_10:9,
+        //% block="eye_11"
+        ir_11:10,
+        //% block="eye_12"
+        ir_12:11,
+        //% block="max_eye_value"
+        max_eye_value:12,
+        //% block="max_eye"
+        max_eye:13,
+        //% block="angle"
+        angle:14,
+        //% block="mode"
+        mode:15,
+    }
+
+    /**
+    * compoundEye read function
+    */
+    //% blockId=compoundEye block="CompoundEye|%index"
+    //% weight=100
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function compoundEyeRead (compound_eye_data: number):number {
+	pins.i2cWriteNumber(
+	19,
+	compound_eye_data,
+	NumberFormat.UInt8LE,
+	false
+	)
+	return pins.i2cReadNumber(19, NumberFormat.UInt8LE, false)
+     }
+
+
 
 
 
