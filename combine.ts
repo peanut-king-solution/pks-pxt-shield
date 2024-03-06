@@ -1021,44 +1021,6 @@ namespace pksdriver {
             setPwm(pn, 0, -speed)
         }
     }
-
-    //% weight=80
-    //% blockId=light_lighton_intensity block="Light|%index|intensity|%intensity" subcategory="shield"
-    //% intensity.min=0 intensity.max=4
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function LightOnIntesity(index: Motors, intensity: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        let speed = 0
-        if (intensity = 0) {
-            speed = 0
-        } 
-        else if(intensity = 1) {
-            speed = 1024 
-        }
-        else if(intensity = 2) {
-            speed = 2048
-        }
-        else if(intensity = 3) {
-            speed = 3072
-        }
-        else if(intensity = 4) {
-            speed = 4095
-        } 
-        
-        if (index > 4 || index <= 0)
-            return
-        let pn = (4 - index) * 2
-        let pp = (4 - index) * 2 + 1
-        if (speed >= 0) {
-            setPwm(pp, 0, speed)
-            setPwm(pn, 0, 0)
-        } else {
-            setPwm(pp, 0, 0)
-            setPwm(pn, 0, -speed)
-        }
-    }
     
     //% weight=90
     //% blockId=light_lighton block="Light On|%index" subcategory="shield"
