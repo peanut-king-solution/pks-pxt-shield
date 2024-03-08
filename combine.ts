@@ -1156,7 +1156,6 @@ namespace pksdriver {
 	*/
 	//% block="get_yaw (Unit: deg)" subcategory="acceleration"
 	export function readTemperature(): number {
-	    let compass_raw = 0;    
 	    let yaw_ang = 0;
 	    pins.i2cWriteNumber(
 	        Compass.BOARD_ID,
@@ -1164,7 +1163,7 @@ namespace pksdriver {
 	        NumberFormat.UInt8BE,
 	        false
 	    );
-	    compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);	
+	    let compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);	
 	    yaw_ang = compass_raw[0] & 0xff;
 	    yaw_ang |= compass_raw[1] << 8;
 	    yaw_ang /= 100;
