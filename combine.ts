@@ -1151,6 +1151,11 @@ namespace pksdriver {
 	    WRI_REG = 0x20,   // write reg
 	
 	};
+	/**
+	    * Compass read function, to get the yaw angle
+	    */
+	    //% blockId=CompassGetYaw block="get_yaw"  subcategory="shield"
+	    //% weight=100
 	export function CompassGetYaw ():number {
 	    let compass_raw = 0;    
 	    let yaw_ang = 0;
