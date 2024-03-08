@@ -1132,7 +1132,40 @@ namespace pksdriver {
 	return pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false)
      }
 
-
+	export enum Compass {
+	
+	
+	    BOARD_ID = 0x08,
+	    //  Compass     (0x40 - 0x5f) + 6 bytes
+	    ACC_RAW = 0x40,   // 6  (0-5)
+	    GYR_RAW = 0x46,   // 6  (6-b)
+	    MAG_RAW = 0x4c,   // 6  (c-2)
+	
+	    GET_ROLL = 0x54,   // 2byte
+	    GET_YAW = 0x56,   // 2byte
+	    GET_PITCH = 0x58,   // 2byte
+	
+	    MAG_CENT = 0x5a,   // xxyyzz
+	    MAG_DATA = 0x3a,   // xxyyzz
+	
+	    WRI_REG = 0x20,   // write reg
+	
+	};
+	export function CompassGetYaw ():number {
+	    let compass_raw = 0;    
+	    let yaw_ang = 0;
+	    pins.i2cWriteNumber(
+	        Compass.BOARD_ID,
+	        Compass.GET_YAW,
+	        NumberFormat.UInt8BE,
+	        false
+	    )
+		compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false)
+	    yaw_ang = compass_raw[0] & 0xff;
+	    yaw_ang |= compass_raw[1] << 8;
+	    yaw_ang /= 100;
+	    return yaw_ang;
+	}
 
 
 
