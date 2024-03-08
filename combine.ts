@@ -1132,7 +1132,7 @@ namespace pksdriver {
 	return pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false)
      }
 
-	export enum Compass {
+	enum Compass {
 	
 	
 	    BOARD_ID = 0x08,
