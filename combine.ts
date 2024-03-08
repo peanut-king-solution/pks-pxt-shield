@@ -1132,43 +1132,38 @@ namespace pksdriver {
 	return pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false)
      }
 
-	// enum Compass {
+	enum Compass {
 	
 	
-	//     BOARD_ID = 0x08,
-	//     //  Compass     (0x40 - 0x5f) + 6 bytes
-	//     ACC_RAW = 0x40,   // 6  (0-5)
-	//     GYR_RAW = 0x46,   // 6  (6-b)
-	//     MAG_RAW = 0x4c,   // 6  (c-2)
+	    BOARD_ID = 0x08,
+	    //  Compass     (0x40 - 0x5f) + 6 bytes
+	    ACC_RAW = 0x40,   // 6  (0-5)
+	    GYR_RAW = 0x46,   // 6  (6-b)
+	    MAG_RAW = 0x4c,   // 6  (c-2)
 	
-	//     GET_ROLL = 0x54,   // 2byte
-	//     GET_YAW = 0x56,   // 2byte
-	//     GET_PITCH = 0x58,   // 2byte
+	    GET_ROLL = 0x54,   // 2byte
+	    GET_YAW = 0x56,   // 2byte
+	    GET_PITCH = 0x58,   // 2byte
 	
-	//     MAG_CENT = 0x5a,   // xxyyzz
-	//     MAG_DATA = 0x3a,   // xxyyzz
+	    MAG_CENT = 0x5a,   // xxyyzz
+	    MAG_DATA = 0x3a,   // xxyyzz
 	
-	//     WRI_REG = 0x20,   // write reg
+	    WRI_REG = 0x20,   // write reg
 	
-	// };
-	// /**
-	// * Compass read function, to get the yaw angle
-	// */
-	// //% block="get_yaw (Unit: deg)" subcategory="acceleration"
-	// export function readTemperature(): number {
-	//     let yaw_ang = 0;
-	//     // pins.i2cWriteNumber(
-	//     //     Compass.BOARD_ID,
-	//     //     Compass.GET_YAW,
-	//     //     NumberFormat.UInt8BE,
-	//     //     false
-	//     // );
-	//     // let compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);	
-	//     // yaw_ang = compass_raw[0] & 0xff;
-	//     // yaw_ang |= compass_raw[1] << 8;
-	//     // yaw_ang /= 100;
-	//     return yaw_ang;
-	// }
+	};
+	/**
+	* Compass read function, to get the yaw angle
+	*/
+	//% block="get_yaw (Unit: deg)" subcategory="acceleration"
+	export function readTemperature(): number {
+	    let yaw_ang = 0;
+	    pins.i2cWriteNumber(Compass.BOARD_ID, Compass.GET_YAW, NumberFormat.UInt8BE, false);
+	    let compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);	
+	    yaw_ang = compass_raw[0] & 0xff;
+	    yaw_ang |= compass_raw[1] << 8;
+	    yaw_ang /= 100;
+	    return yaw_ang;
+	}
 
 
 }
