@@ -1132,9 +1132,9 @@ namespace pksdriver {
 	let temp=pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false);
 	if(temp==255){
             return-1;
-        }else if(compound_eye_data==angle){
+        }else if(compound_eye_data==compoundEyeData.angle){
 		temp*=2;
-	}else if(compound_eye_data==max_eye){
+	}else if(compound_eye_data==compoundEyeData.max_eye){
 		temp+=1;
 	}
 	return temp;
