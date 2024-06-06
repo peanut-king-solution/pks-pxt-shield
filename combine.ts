@@ -38,8 +38,9 @@ namespace pksdriver {
     //% serialOtput.defl=false
     //% wait.defl=true
     //% blockExternalInputs=true
-    //% subcategory="temperature and humidity"
-    export function queryData(DHT: DHTtype, dataPin: DigitalPin, pullUp: boolean, serialOtput: boolean, wait: boolean) {
+    //% weight=100
+    //% subcategory="Temperature and Humidity"
+    export function queryData(DHT: DHTtype, dataPin: DigitalPin, pullUp: boolean, serialOtput: boolean) {
 
         //initialize
         let startTime: number = 0
@@ -140,15 +141,13 @@ namespace pksdriver {
 
         }
 
-        //wait 2 sec after query if needed
-        if (wait) basic.pause(2000)
-
     }
 
     /**
     * Read humidity/temperature data from lastest query of DHT11/DHT22
     */
-    //% block="Read $data" subcategory="temperature and humidity"
+    //% weight=99
+    //% block="Read $data" subcategory="Temperature and Humidity"
     export function readData(data: dataType): number {
         return data == dataType.humidity ? _humidity : _temperature
     }
@@ -156,7 +155,8 @@ namespace pksdriver {
     /**
     * Select temperature type (Celsius/Fahrenheit)"
     */
-    //% block="Temperature type: $temp" subcategory="temperature and humidity"
+    //% block="Temperature type: $temp" subcategory="Temperature and Humidity"
+    //% weight=98
     export function selectTempType(temp: tempType) {
         _temptype = temp
     }
@@ -164,7 +164,8 @@ namespace pksdriver {
     /**
     * Determind if last query is successful (checksum ok)
     */
-    //% block="Last query successful?" subcategory="temperature and humidity"
+    //% block="Last query successful?" subcategory="Temperature and Humidity"
+    //% weight=97
     export function readDataSuccessful(): boolean {
         return _readSuccessful
     }
@@ -172,7 +173,8 @@ namespace pksdriver {
     /**
     * Determind if sensor responded successfully (not disconnected, etc) in last query
     */
-    //% block="Last query sensor responding?" subcategory="temperature and humidity"
+    //% block="Last query sensor responding?" subcategory="Temperature and Humidity"
+    //% weight=96
     export function sensorrResponding(): boolean {
         return _sensorresponding
     }
@@ -273,7 +275,6 @@ namespace pksdriver {
          * get Year
          */
         //% blockId="DS1302_get_year" block="%ds|get year" subcategory="Hydroponic"
-        //% group="Motor" weight=90
         //% weight=80 blockGap=8
         //% parts="DS1302"
         getYear(): number {
@@ -383,7 +384,7 @@ namespace pksdriver {
          * get Minute
          */
         //% blockId="DS1302_get_minute" block="%ds|get minute" subcategory="Hydroponic"
-        //% weight=72 blockGap=8
+        //% weight=70 blockGap=8
         //% parts="DS1302"
         getMinute(): number {
             return Math.min(HexToDec(this.getReg(DS1302_REG_MINUTE + 1)), 59)
@@ -405,7 +406,7 @@ namespace pksdriver {
          * get Second
          */
         //% blockId="DS1302_get_second" block="%ds|get second" subcategory="Hydroponic"
-        //% weight=70 blockGap=8
+        //% weight=67 blockGap=8
         //% parts="DS1302"
         getSecond(): number {
             return Math.min(HexToDec(this.getReg(DS1302_REG_SECOND + 1)), 59)
@@ -416,7 +417,7 @@ namespace pksdriver {
          * @param dat is the Second will be set, eg: 0
          */
         //% blockId="DS1302_set_second" block="%ds|set second %dat" subcategory="Hydroponic"
-        //% weight=69 blockGap=8
+        //% weight=68 blockGap=8
         //% parts="DS1302"
         //% dat.min=0 dat.max=59
         setSecond(dat: number): void {
@@ -654,7 +655,8 @@ namespace pksdriver {
     /**
      * Initialize MPU6050
      */
-    //% block="Initialize MPU6050" subcategory="acceleration"
+    //% block="Initialize MPU6050" subcategory="Acceleration"
+    //% weight=100
     export function initMPU6050() {
         let buffer = pins.createBuffer(2);
         buffer[0] = power_mgmt;
@@ -665,7 +667,8 @@ namespace pksdriver {
     /**
       * Get gyroscope values
       */
-    //% block="Gyroscope value of %axisXYZ axis with %gyroSen sensitivity (Unit: rad/s)" subcategory="acceleration"
+    //% block="Gyroscope value of %axisXYZ axis with %gyroSen sensitivity (Unit: rad/s)" subcategory="Acceleration"
+    //% weight=99
     export function gyroscope(axis: axisXYZ, sensitivity: gyroSen) {
         updateGyroscope(sensitivity);
         if (axis == axisXYZ.x) {
@@ -682,7 +685,8 @@ namespace pksdriver {
     /**
      * Get rotation of the corresponding Axis
      */
-    //% block="Angle of %xaxisXYZ axis with %accelSen sensitivity (Unit: Degrees)" subcategory="acceleration"
+    //% block="Angle of %xaxisXYZ axis with %accelSen sensitivity (Unit: Degrees)" subcategory="Acceleration"
+    //% weight=98
     export function axisRotation(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
 
@@ -706,7 +710,8 @@ namespace pksdriver {
     /**
      * Get acceleration of the corresponding Axis
      */
-    //% block="Acceleration of %xaxisXYZ axis with %accelSen sensitivity (Unit: g)" subcategory="acceleration"
+    //% block="Acceleration of %xaxisXYZ axis with %accelSen sensitivity (Unit: g)" subcategory="Acceleration"
+    //% weight=97
     export function axisAcceleration(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
         // Return acceleration of specific axis
@@ -724,10 +729,43 @@ namespace pksdriver {
     /**
      * Get temperature
      */
-    //% block="Temperature (Unit: Celsius)" subcategory="acceleration"
+    //% block="Temperature (Unit: Celsius)" subcategory="Acceleration"
+    //% weight=96
     export function readTemperature(): number {
         let rawTemp = readData(tempAddr);
         return 36.53 + rawTemp / 340;
+    }
+
+    enum Compass {
+        BOARD_ID = 0x08,
+        //  Compass     (0x40 - 0x5f) + 6 bytes
+        ACC_RAW = 0x40,   // 6  (0-5)
+        GYR_RAW = 0x46,   // 6  (6-b)
+        MAG_RAW = 0x4c,   // 6  (c-2)
+
+        GET_ROLL = 0x54,   // 2byte
+        GET_YAW = 0x56,   // 2byte
+        GET_PITCH = 0x58,   // 2byte
+
+        MAG_CENT = 0x5a,   // xxyyzz
+        MAG_DATA = 0x3a,   // xxyyzz
+
+        WRI_REG = 0x20,   // write reg
+
+    };
+    /**
+    * Compass read function, to get the yaw angle
+    */
+    //% block="get_yaw (Unit: deg)" subcategory="Acceleration"
+    //% weight=70
+    export function compass_get_yaw(): number {
+        let yaw_ang = 0;
+        pins.i2cWriteNumber(Compass.BOARD_ID, Compass.GET_YAW, NumberFormat.UInt8BE, false);
+        let compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);
+        yaw_ang = compass_raw[0] & 0xff;
+        yaw_ang |= compass_raw[1] << 8;
+        yaw_ang /= 100;
+        return yaw_ang;
     }
 }
 
@@ -948,7 +986,7 @@ namespace pksdriver {
      * S1~S8.
      * 0°~180°.
     */
-    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="shield"
+    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="micro:bit Shield"
     //% weight=100
     //% degree.min=0 degree.max=180
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
@@ -965,8 +1003,8 @@ namespace pksdriver {
     /**
      * set servo off
     */
-    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="shield"
-    //% weight=110
+    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="micro:bit Shield"
+    //% weight=99
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOff(index: Servos): void {
         if (!initialized) {
@@ -978,8 +1016,8 @@ namespace pksdriver {
     /**
      * set servo on
     */
-    //% blockId=motor_servoOn block="ServoOn|%index" subcategory="shield"
-    //% weight=120
+    //% blockId=motor_servoOn block="ServoOn|%index" subcategory="micro:bit Shield"
+    //% weight=98
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOn(index: Servos): void {
         if (!initialized) {
@@ -993,8 +1031,8 @@ namespace pksdriver {
      * M1~M4.
      * speed(0~255).
     */
-    //% weight=90
-    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="shield"
+    //% weight=130
+    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="micro:bit Shield"
     //% speed.min=0 speed.max=255
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
@@ -1021,9 +1059,31 @@ namespace pksdriver {
             setPwm(pn, 0, -speed)
         }
     }
-    
+
+    /**
+     * Stop the dc motor.
+    */
+    //% weight=129
+    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="micro:bit Shield"
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
+    export function motorStop(index: Motors) {
+        setPwm((4 - index) * 2, 0, 0);
+        setPwm((4 - index) * 2 + 1, 0, 0);
+    }
+
+    /**
+     * Stop all motors
+    */
+    //% weight=128
+    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="micro:bit Shield"
+    export function motorStopAll(): void {
+        for (let idx = 1; idx <= 4; idx++) {
+            motorStop(idx);
+        }
+    }
+
     //% weight=90
-    //% blockId=light_lighton block="Light On|%index" subcategory="shield"
+    //% blockId=light_lighton block="Light On|%index" subcategory="micro:bit Shield"
     export function LightOn(index: Motors): void {
         if (!initialized) {
             initPCA9685()
@@ -1050,36 +1110,13 @@ namespace pksdriver {
     }
 
     //% weight=90
-    //% blockId=light_lightoff block="Light Off|%index" subcategory="shield"
+    //% blockId=light_lightoff block="Light Off|%index" subcategory="micro:bit Shield"
     export function LightOff(index: Motors) {
         setPwm((4 - index) * 2, 0, 0);
         setPwm((4 - index) * 2 + 1, 0, 0);
     }
 
-
-    /**
-     * Stop the dc motor.
-    */
-    //% weight=20
-    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="shield"
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function motorStop(index: Motors) {
-        setPwm((4 - index) * 2, 0, 0);
-        setPwm((4 - index) * 2 + 1, 0, 0);
-    }
-
-    /**
-     * Stop all motors
-    */
-    //% weight=10
-    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="shield"
-    export function motorStopAll(): void {
-        for (let idx = 1; idx <= 4; idx++) {
-            motorStop(idx);
-        }
-    }
-
-    export enum compoundEyeData{
+    export enum compoundEyeData {
         //% block="eye_1"
         ir_1,
         //% block="eye_2"
@@ -1105,13 +1142,13 @@ namespace pksdriver {
         //% block="eye_12"
         ir_12,
         //% block="max_eye_value"
-	//% weight=99
+        //% weight=99
         max_eye_value,
         //% block="max_eye"
-	//% weight=100
+        //% weight=100
         max_eye,
         //% block="angle"
-	//% weight=98
+        //% weight=98
         angle,
         //% block="mode"
         mode,
@@ -1120,59 +1157,25 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="shield"
-    //% weight=100
-    export function compoundEyeRead (compound_eye_data: compoundEyeData):number {
-	pins.i2cWriteNumber(
-	0x13,
-	compound_eye_data,
-	NumberFormat.UInt8LE,
-	false
-	)
-	let temp=pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false);
-	if(temp==255){
-            return-1;
-        }else if(compound_eye_data==compoundEyeData.angle){
-		temp*=2;
-	}else if(compound_eye_data==compoundEyeData.max_eye){
-		temp+=1;
-	}
-	return temp;
-     }
-
-	enum Compass {
-	
-	
-	    BOARD_ID = 0x08,
-	    //  Compass     (0x40 - 0x5f) + 6 bytes
-	    ACC_RAW = 0x40,   // 6  (0-5)
-	    GYR_RAW = 0x46,   // 6  (6-b)
-	    MAG_RAW = 0x4c,   // 6  (c-2)
-	
-	    GET_ROLL = 0x54,   // 2byte
-	    GET_YAW = 0x56,   // 2byte
-	    GET_PITCH = 0x58,   // 2byte
-	
-	    MAG_CENT = 0x5a,   // xxyyzz
-	    MAG_DATA = 0x3a,   // xxyyzz
-	
-	    WRI_REG = 0x20,   // write reg
-	
-	};
-	/**
-	* Compass read function, to get the yaw angle
-	*/
-	//% block="get_yaw (Unit: deg)" subcategory="acceleration"
-    export function compass_get_yaw(): number {
-	    let yaw_ang = 0;
-	    pins.i2cWriteNumber(Compass.BOARD_ID, Compass.GET_YAW, NumberFormat.UInt8BE, false);
-	    let compass_raw = pins.i2cReadBuffer(Compass.BOARD_ID, 2, false);	
-	    yaw_ang = compass_raw[0] & 0xff;
-	    yaw_ang |= compass_raw[1] << 8;
-	    yaw_ang /= 100;
-	    return yaw_ang;
-	}
-
+    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="micro:bit Shield"
+    //% weight=50
+    export function compoundEyeRead(compound_eye_data: compoundEyeData): number {
+        pins.i2cWriteNumber(
+            0x13,
+            compound_eye_data,
+            NumberFormat.UInt8LE,
+            false
+        )
+        let temp = pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false);
+        if (temp == 255) {
+            return -1;
+        } else if (compound_eye_data == compoundEyeData.angle) {
+            temp *= 2;
+        } else if (compound_eye_data == compoundEyeData.max_eye) {
+            temp += 1;
+        }
+        return temp;
+    }
 
 }
 
