@@ -1,12 +1,7 @@
 /*！
  * @file pxt-motor/main.ts
- * @brief PKSRobot's microbit motor drive makecode library.
- * @n [Get the module here](http://www.dfrobot.com.cn/goods-1577.html)
- * @n This is the microbit special motor drive library, which realizes control 
- *    of the eight-channel steering gear, two-step motor and four-way dc motor.
- *
- * @copyright	[DFRobot](https://peanutkingsolution.com), 2023
- * @copyright	GNU Lesser General Public License
+ * @brief PKSRobot's microbit shield makecode library.
+ * @n [Get the module here](https://www.peanutkingstore.com/product/peanut-king-micro-bit-robot-shield-v1-2)
  *
  * @author [email](info@peanutkingsolution.com)
  * @version  V1.0.0
