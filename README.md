@@ -37,7 +37,7 @@ It's known for its wide voltage compatibility, numerous ports, compact size, and
 
 ## License
 
-GNU
+MIT
 
 ## Supported targets
 
