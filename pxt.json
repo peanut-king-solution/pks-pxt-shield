@@ -1,8 +1,8 @@
 {
     "name": "PKS Driver",
     "version": "1.0.0",
-    "description": "This is a library for PKS products.",
-    "license": "GNU",
+    "description": "This is a library for Peanut KING Micro:bit Robot Shield",
+    "license": "MIT",
     "dependencies": {
         "core": "*"
     },
