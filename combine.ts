@@ -30,8 +30,7 @@ namespace pksdriver {
     let _sensorresponding: boolean = false
 
     /**
-    * Query data from DHT11/DHT22 sensor. If you are using 4 pins/no PCB board versions, you'll need to pull up the data pin. 
-    * It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
+    * Query data from DHT11/DHT22 sensor. It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
     */
     //% block="Query $DHT|Data pin $dataPin|Pin pull up $pullUp|Serial output $serialOtput|Wait 2 sec after query $wait"
     //% pullUp.defl=true
@@ -181,7 +180,10 @@ namespace pksdriver {
 
 }
 
-//% weight=100 color=#A040E0 icon="\uf017" block="PKS drivers"
+//% weight=100 
+//% color=#A040E0 
+//% icon="\uf017" 
+//% block="PKS drivers"
 namespace pksdriver {
     let DS1302_REG_SECOND = 0x80
     let DS1302_REG_MINUTE = 0x82
@@ -517,9 +519,7 @@ namespace pksdriver {
         return ds;
     }
 }
-/**
- * Enumeration of Axis (X, Y & Z)
- */
+
 enum axisXYZ {
     //% block="X"
     x,
@@ -529,10 +529,9 @@ enum axisXYZ {
     z
 }
 
-/**
- * Sensitivity of Accelerometer
- */
 enum accelSen {
+    // accelerometer sensitivity
+
     //% block="2g"
     range_2_g,
     //% block="4g"
@@ -543,10 +542,9 @@ enum accelSen {
     range_16_g
 }
 
-/**
- * Sensitivity of Gyroscope
- */
 enum gyroSen {
+    // gyroscope sensitivite
+
     //% block="250dps"
     range_250_dps,
     //% block="500dps"
@@ -557,7 +555,10 @@ enum gyroSen {
     range_2000_dps
 }
 
-//% color="#FFBF00" icon="\uf12e" weight=60 block="PKS drivers"
+//% color="#FFBF00"
+//% icon="\uf12e"
+//% weight=60 
+//% block="PKS drivers"
 namespace pksdriver {
     let i2cAddress = 0x68;
     let power_mgmt = 0x6b;
@@ -769,58 +770,15 @@ namespace pksdriver {
     }
 }
 
-//% weight=60 color=#1c4980 icon="\ue5eb" block="PKS drivers"
+//% weight=60 
+//% color=#1c4980 
+//% icon="\ue5eb" 
+//% block="PKS drivers"
 namespace pksdriver {
     const PCA9685_ADDRESS = 0x40
     const MODE1 = 0x00
-    const MODE2 = 0x01
-    const SUBADR1 = 0x02
-    const SUBADR2 = 0x03
-    const SUBADR3 = 0x04
     const PRESCALE = 0xFE
     const LED0_ON_L = 0x06
-    const LED0_ON_H = 0x07
-    const LED0_OFF_L = 0x08
-    const LED0_OFF_H = 0x09
-    const ALL_LED_ON_L = 0xFA
-    const ALL_LED_ON_H = 0xFB
-    const ALL_LED_OFF_L = 0xFC
-    const ALL_LED_OFF_H = 0xFD
-
-    const STP_CHA_L = 2047
-    const STP_CHA_H = 4095
-
-    const STP_CHB_L = 1
-    const STP_CHB_H = 2047
-
-    const STP_CHC_L = 1023
-    const STP_CHC_H = 3071
-
-    const STP_CHD_L = 3071
-    const STP_CHD_H = 1023
-
-
-    const BYG_CHA_L = 3071
-    const BYG_CHA_H = 1023
-
-    const BYG_CHB_L = 1023
-    const BYG_CHB_H = 3071
-
-    const BYG_CHC_L = 4095
-    const BYG_CHC_H = 2047
-
-    const BYG_CHD_L = 2047
-    const BYG_CHD_H = 4095
-
-    /**
-     * The user can choose the step motor model.
-     */
-    export enum Stepper {
-        //% block="42"
-        Ste1 = 1,
-        //% block="28"
-        Ste2 = 2
-    }
 
     /**
      * The user can select the 8 steering gear controller.
@@ -856,28 +814,12 @@ namespace pksdriver {
         CCW = -1,
     }
 
-    /**
-     * The user can select a two-path stepper motor controller.
-     */
-    export enum Steppers {
-        M1_M2 = 0x1,
-        M3_M4 = 0x2
-    }
-
-
-
     let initialized = false
 
     function i2cWrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
         buf[0] = reg
         buf[1] = value
-        pins.i2cWriteBuffer(addr, buf)
-    }
-
-    function i2cCmd(addr: number, value: number) {
-        let buf = pins.createBuffer(1)
-        buf[0] = value
         pins.i2cWriteBuffer(addr, buf)
     }
 
@@ -921,65 +863,6 @@ namespace pksdriver {
         buf[4] = (off >> 8) & 0xff;
         pins.i2cWriteBuffer(PCA9685_ADDRESS, buf);
     }
-
-
-    function setStepper_28(index: number, dir: boolean): void {
-        if (index == 1) {
-            if (dir) {
-                setPwm(4, STP_CHA_L, STP_CHA_H);
-                setPwm(6, STP_CHB_L, STP_CHB_H);
-                setPwm(5, STP_CHC_L, STP_CHC_H);
-                setPwm(7, STP_CHD_L, STP_CHD_H);
-            } else {
-                setPwm(7, STP_CHA_L, STP_CHA_H);
-                setPwm(5, STP_CHB_L, STP_CHB_H);
-                setPwm(6, STP_CHC_L, STP_CHC_H);
-                setPwm(4, STP_CHD_L, STP_CHD_H);
-            }
-        } else {
-            if (dir) {
-                setPwm(0, STP_CHA_L, STP_CHA_H);
-                setPwm(2, STP_CHB_L, STP_CHB_H);
-                setPwm(1, STP_CHC_L, STP_CHC_H);
-                setPwm(3, STP_CHD_L, STP_CHD_H);
-            } else {
-                setPwm(3, STP_CHA_L, STP_CHA_H);
-                setPwm(1, STP_CHB_L, STP_CHB_H);
-                setPwm(2, STP_CHC_L, STP_CHC_H);
-                setPwm(0, STP_CHD_L, STP_CHD_H);
-            }
-        }
-    }
-
-
-    function setStepper_42(index: number, dir: boolean): void {
-        if (index == 1) {
-            if (dir) {
-                setPwm(7, BYG_CHA_L, BYG_CHA_H);
-                setPwm(6, BYG_CHB_L, BYG_CHB_H);
-                setPwm(5, BYG_CHC_L, BYG_CHC_H);
-                setPwm(4, BYG_CHD_L, BYG_CHD_H);
-            } else {
-                setPwm(7, BYG_CHC_L, BYG_CHC_H);
-                setPwm(6, BYG_CHD_L, BYG_CHD_H);
-                setPwm(5, BYG_CHA_L, BYG_CHA_H);
-                setPwm(4, BYG_CHB_L, BYG_CHB_H);
-            }
-        } else {
-            if (dir) {
-                setPwm(3, BYG_CHA_L, BYG_CHA_H);
-                setPwm(2, BYG_CHB_L, BYG_CHB_H);
-                setPwm(1, BYG_CHC_L, BYG_CHC_H);
-                setPwm(0, BYG_CHD_L, BYG_CHD_H);
-            } else {
-                setPwm(3, BYG_CHC_L, BYG_CHC_H);
-                setPwm(2, BYG_CHD_L, BYG_CHD_H);
-                setPwm(1, BYG_CHA_L, BYG_CHA_H);
-                setPwm(0, BYG_CHB_L, BYG_CHB_H);
-            }
-        }
-    }
-
 
     /**
      * Steering gear control function.
