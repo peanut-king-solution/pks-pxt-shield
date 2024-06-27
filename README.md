@@ -34,6 +34,17 @@ It's known for its wide voltage compatibility, numerous ports, compact size, and
 ### 4. Temperature and Humidity
 ![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/temperature.png)
 
+## Code Example
+```JavaScript
+basic.forever(function () {
+    pksdriver.MotorRun(pksdriver.Motors.M1, pksdriver.Dir.CCW, 80) // set the speed of moter M1
+    pksdriver.MotorRun(pksdriver.Motors.M2, pksdriver.Dir.CW, 80)
+    basic.pause(1500)
+    pksdriver.motorStopAll() // stop all the motors
+})
+
+
+```
 
 ## License
 
