@@ -1,7 +1,7 @@
 # PKS-Driver
 
-Micro:bit motor drive expansion board.
----------------------------------------------------------
+Micro:bit motor drive expansion board. \
+https://www.peanutkingstore.com/product/peanut-king-micro-bit-robot-shield-v1-2
 
 ## Table of Contents
 
