@@ -23,16 +23,13 @@ It's known for its wide voltage compatibility, numerous ports, compact size, and
 
 ## Blocks
 ### 1. Motors
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/motors.png)
+![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/robot.png)
 
 ### 2. Gyroscope
 ![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/gyro.png)
 
 ### 3. Hydroponic
 ![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/hydroponic.png)
-
-### 4. Temperature and Humidity
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/temperature.png)
 
 ## Code Example
 ```JavaScript
