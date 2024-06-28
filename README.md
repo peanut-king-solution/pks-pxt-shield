@@ -23,13 +23,13 @@ It's known for its wide voltage compatibility, numerous ports, compact size, and
 
 ## Blocks
 ### 1. Robot
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/robot.png)
+![image](image/robot.png)
 
 ### 2. Gyroscope
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/gyro.png)
+![image](image/gyro.png)
 
 ### 3. Hydroponic
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/hydroponic.png)
+![image](himage/hydroponic.png)
 
 ## Code Example
 ```JavaScript
