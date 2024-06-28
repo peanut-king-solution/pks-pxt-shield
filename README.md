@@ -22,17 +22,14 @@ The expansion board is powered by a voltage range of 3.5v to 5.5v and offers two
 It's known for its wide voltage compatibility, numerous ports, compact size, and plug-and-play convenience.
 
 ## Blocks
-### 1. Motors
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/motors.png)
+### 1. Robot
+![image](image/robot.png)
 
 ### 2. Gyroscope
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/gyro.png)
+![image](image/gyro.png)
 
 ### 3. Hydroponic
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/hydroponic.png)
-
-### 4. Temperature and Humidity
-![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/temperature.png)
+![image](image/hydroponic.png)
 
 ## Code Example
 ```JavaScript
