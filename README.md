@@ -22,7 +22,7 @@ The expansion board is powered by a voltage range of 3.5v to 5.5v and offers two
 It's known for its wide voltage compatibility, numerous ports, compact size, and plug-and-play convenience.
 
 ## Blocks
-### 1. Motors
+### 1. Robot
 ![image](https://github.com/peanut-king-solution/pks-pxt-shield/blob/master/image/robot.png)
 
 ### 2. Gyroscope
