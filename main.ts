@@ -4,7 +4,7 @@
 //% block="PKS drivers"
 namespace pksdriver {
     const PCA9685_ADDRESS = 0x40
-    const MODE1 = 0x00
+    const MODE = 0x00
     const PRESCALE = 0xFE
     const LED0_ON_L = 0x06
 
@@ -44,11 +44,10 @@ namespace pksdriver {
 
     let initialized = false
 
-    function i2cWrite(addr: number, reg: number, value: number) {
-        let buf = pins.createBuffer(2)
-        buf[0] = reg
-        buf[1] = value
-        pins.i2cWriteBuffer(addr, buf)
+    function initPCA9685(): void {
+        i2cWrite(PCA9685_ADDRESS, MODE, 0x00)
+        setFreq(50);
+        initialized = true
     }
 
     function i2cRead(addr: number, reg: number) {
@@ -57,10 +56,11 @@ namespace pksdriver {
         return val;
     }
 
-    function initPCA9685(): void {
-        i2cWrite(PCA9685_ADDRESS, MODE1, 0x00)
-        setFreq(50);
-        initialized = true
+    function i2cWrite(addr: number, reg: number, value: number) {
+        let buf = pins.createBuffer(2)
+        buf[0] = reg
+        buf[1] = value
+        pins.i2cWriteBuffer(addr, buf)
     }
 
     function setFreq(freq: number): void {
@@ -70,13 +70,13 @@ namespace pksdriver {
         prescaleval /= freq;
         prescaleval -= 1;
         let prescale = prescaleval;//Math.floor(prescaleval + 0.5);
-        let oldmode = i2cRead(PCA9685_ADDRESS, MODE1);
+        let oldmode = i2cRead(PCA9685_ADDRESS, MODE);
         let newmode = (oldmode & 0x7F) | 0x10; // sleep
-        i2cWrite(PCA9685_ADDRESS, MODE1, newmode); // go to sleep
+        i2cWrite(PCA9685_ADDRESS, MODE, newmode); // go to sleep
         i2cWrite(PCA9685_ADDRESS, PRESCALE, prescale); // set the prescaler
-        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode);
+        i2cWrite(PCA9685_ADDRESS, MODE, oldmode);
         control.waitMicros(5000);
-        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);
+        i2cWrite(PCA9685_ADDRESS, MODE, oldmode | 0xa1);
     }
 
     function setPwm(channel: number, on: number, off: number): void {
@@ -291,23 +291,17 @@ namespace pksdriver {
 }
 
 enum DHTtype {
-    //% block="DHT11"
     DHT11,
-    //% block="DHT22"
     DHT22,
 }
 
 enum dataType {
-    //% block="humidity"
     humidity,
-    //% block="temperature"
     temperature,
 }
 
 enum tempType {
-    //% block="Celsius (*C)"
     celsius,
-    //% block="Fahrenheit (*F)"
     fahrenheit,
 }
 
@@ -347,8 +341,6 @@ namespace pksdriver {
         for (let index = 0; index < 40; index++) dataArray.push(false)
         for (let index = 0; index < 5; index++) resultArray.push(0)
 
-        // _humidity = -999.0
-        // _temperature = -999.0
         _readSuccessful = false
         _sensorresponding = false
         startTime = input.runningTimeMicros()
@@ -397,7 +389,7 @@ namespace pksdriver {
             if (checksumTmp >= 256) checksumTmp -= 256
             if (checksum == checksumTmp) _readSuccessful = true
 
-            //read data if checksum ok
+            //read data if checksum ok, output new readings, do nothing otherwise
             if (_readSuccessful) {
                 if (DHT == DHTtype.DHT11) {
                     //DHT11
