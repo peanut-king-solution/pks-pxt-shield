@@ -29,7 +29,7 @@ It's known for its wide voltage compatibility, numerous ports, compact size, and
 ![image](image/gyro.png)
 
 ### 3. Hydroponic
-![image](himage/hydroponic.png)
+![image](image/hydroponic.png)
 
 ## Code Example
 ```JavaScript
