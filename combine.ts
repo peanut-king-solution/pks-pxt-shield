@@ -1,3 +1,295 @@
+//% weight=60
+//% color=#1c4980 
+//% icon="\uf2db" 
+//% block="PKS drivers"
+namespace pksdriver {
+    const PCA9685_ADDRESS = 0x40
+    const MODE1 = 0x00
+    const PRESCALE = 0xFE
+    const LED0_ON_L = 0x06
+
+    /**
+     * The user can select the 8 steering gear controller.
+     */
+    export enum Servos {
+        S1 = 0x08,
+        S2 = 0x07,
+        S3 = 0x06,
+        S4 = 0x05,
+        S5 = 0x04,
+        S6 = 0x03,
+        S7 = 0x02,
+        S8 = 0x01
+    }
+
+    /**
+     * The user selects the 4-way dc motor.
+     */
+    export enum Motors {
+        M1 = 0x1,
+        M2 = 0x2,
+        M3 = 0x3,
+        M4 = 0x4
+    }
+
+    /**
+     * the motor rotation direction
+     */
+    export enum Dir {
+        //% blockId="CW" block="CW"
+        CW = 1,
+        //% blockId="CCW" block="CCW"
+        CCW = -1,
+    }
+
+    let initialized = false
+
+    function i2cWrite(addr: number, reg: number, value: number) {
+        let buf = pins.createBuffer(2)
+        buf[0] = reg
+        buf[1] = value
+        pins.i2cWriteBuffer(addr, buf)
+    }
+
+    function i2cRead(addr: number, reg: number) {
+        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
+        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
+        return val;
+    }
+
+    function initPCA9685(): void {
+        i2cWrite(PCA9685_ADDRESS, MODE1, 0x00)
+        setFreq(50);
+        initialized = true
+    }
+
+    function setFreq(freq: number): void {
+        // Constrain the frequency
+        let prescaleval = 25000000;
+        prescaleval /= 4096;
+        prescaleval /= freq;
+        prescaleval -= 1;
+        let prescale = prescaleval;//Math.floor(prescaleval + 0.5);
+        let oldmode = i2cRead(PCA9685_ADDRESS, MODE1);
+        let newmode = (oldmode & 0x7F) | 0x10; // sleep
+        i2cWrite(PCA9685_ADDRESS, MODE1, newmode); // go to sleep
+        i2cWrite(PCA9685_ADDRESS, PRESCALE, prescale); // set the prescaler
+        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode);
+        control.waitMicros(5000);
+        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);
+    }
+
+    function setPwm(channel: number, on: number, off: number): void {
+        if (channel < 0 || channel > 15)
+            return;
+
+        let buf = pins.createBuffer(5);
+        buf[0] = LED0_ON_L + 4 * channel;
+        buf[1] = on & 0xff;
+        buf[2] = (on >> 8) & 0xff;
+        buf[3] = off & 0xff;
+        buf[4] = (off >> 8) & 0xff;
+        pins.i2cWriteBuffer(PCA9685_ADDRESS, buf);
+    }
+
+    /**
+     * Steering gear control function.
+     * S1~S8.
+     * 0°~180°.
+    */
+    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="Robot"
+    //% weight=100
+    //% degree.min=0 degree.max=180
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servo(index: Servos, degree: number): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        // 50hz
+        let v_us = (degree * 1800 / 180 + 600) // 0.6ms ~ 2.4ms
+        let value = v_us * 4096 / 20000
+        setPwm(index + 7, 0, value)
+    }
+
+    /**
+     * set servo off
+    */
+    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="Robot"
+    //% weight=99
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servoOff(index: Servos): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setPwm(index + 7, 0, 0)
+    }
+
+    /**
+     * set servo on
+    */
+    //% blockId=motor_servoOn block="ServoOn|%index" subcategory="Robot"
+    //% weight=98
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
+    export function servoOn(index: Servos): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setPwm(index + 7, 0, 150)
+    }
+
+    /**
+     * Execute a motor
+     * M1~M4.
+     * speed(0~255).
+    */
+    //% weight=130
+    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="Robot"
+    //% speed.min=0 speed.max=255
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
+    //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
+    export function MotorRun(index: Motors, direction: Dir, speed: number): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        speed = speed * 16 * direction; // map 255 to 4096
+        if (speed >= 4096) {
+            speed = 4095
+        }
+        if (speed <= -4096) {
+            speed = -4095
+        }
+        if (index > 4 || index <= 0)
+            return
+        let pn = (4 - index) * 2
+        let pp = (4 - index) * 2 + 1
+        if (speed >= 0) {
+            setPwm(pp, 0, speed)
+            setPwm(pn, 0, 0)
+        } else {
+            setPwm(pp, 0, 0)
+            setPwm(pn, 0, -speed)
+        }
+    }
+
+    /**
+     * Stop the dc motor.
+    */
+    //% weight=129
+    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="Robot"
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
+    export function motorStop(index: Motors) {
+        setPwm((4 - index) * 2, 0, 0);
+        setPwm((4 - index) * 2 + 1, 0, 0);
+    }
+
+    /**
+     * Stop all motors
+    */
+    //% weight=128
+    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="Robot"
+    export function motorStopAll(): void {
+        for (let idx = 1; idx <= 4; idx++) {
+            motorStop(idx);
+        }
+    }
+
+    //% weight=90
+    //% blockId=light_lighton block="Light On|%index" subcategory="Robot"
+    export function LightOn(index: Motors): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        let speed = 255
+        speed = speed * 16 * 1; // map 255 to 4096
+        if (speed >= 4096) {
+            speed = 4095
+        }
+        if (speed <= -4096) {
+            speed = -4095
+        }
+        if (index > 4 || index <= 0)
+            return
+        let pn = (4 - index) * 2
+        let pp = (4 - index) * 2 + 1
+        if (speed >= 0) {
+            setPwm(pp, 0, speed)
+            setPwm(pn, 0, 0)
+        } else {
+            setPwm(pp, 0, 0)
+            setPwm(pn, 0, -speed)
+        }
+    }
+
+    //% weight=90
+    //% blockId=light_lightoff block="Light Off|%index" subcategory="Robot"
+    export function LightOff(index: Motors) {
+        setPwm((4 - index) * 2, 0, 0);
+        setPwm((4 - index) * 2 + 1, 0, 0);
+    }
+
+    export enum compoundEyeData {
+        //% block="eye_1"
+        ir_1,
+        //% block="eye_2"
+        ir_2,
+        //% block="eye_3"
+        ir_3,
+        //% block="eye_4"
+        ir_4,
+        //% block="eye_5"
+        ir_5,
+        //% block="eye_6"
+        ir_6,
+        //% block="eye_7"
+        ir_7,
+        //% block="eye_8"
+        ir_8,
+        //% block="eye_9"
+        ir_9,
+        //% block="eye_10"
+        ir_10,
+        //% block="eye_11"
+        ir_11,
+        //% block="eye_12"
+        ir_12,
+        //% block="max_eye_value"
+        //% weight=99
+        max_eye_value,
+        //% block="max_eye"
+        //% weight=100
+        max_eye,
+        //% block="angle"
+        //% weight=98
+        angle,
+        //% block="mode"
+        mode,
+    }
+
+    /**
+    * compoundEye read function
+    */
+    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="Robot"
+    //% weight=50
+    export function compoundEyeRead(compound_eye_data: compoundEyeData): number {
+        pins.i2cWriteNumber(
+            0x13,
+            compound_eye_data,
+            NumberFormat.UInt8LE,
+            false
+        )
+        let temp = pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false);
+        if (temp == 255) {
+            return -1;
+        } else if (compound_eye_data == compoundEyeData.angle) {
+            temp *= 2;
+        } else if (compound_eye_data == compoundEyeData.max_eye) {
+            temp += 1;
+        }
+        return temp;
+    }
+
+}
+
 enum DHTtype {
     //% block="DHT11"
     DHT11,
@@ -19,8 +311,10 @@ enum tempType {
     fahrenheit,
 }
 
-
-//% block="PKS drivers" weight=60s color=#ff8f3f
+//% weight=60
+//% color=#1c4980 
+//% icon="\uf2db" 
+//% block="PKS drivers"
 namespace pksdriver {
 
     let _temperature: number = -999.0
@@ -30,8 +324,7 @@ namespace pksdriver {
     let _sensorresponding: boolean = false
 
     /**
-    * Query data from DHT11/DHT22 sensor. If you are using 4 pins/no PCB board versions, you'll need to pull up the data pin. 
-    * It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
+    * Query data from DHT11/DHT22 sensor. It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
     */
     //% block="Query $DHT|Data pin $dataPin|Pin pull up $pullUp|Serial output $serialOtput|Wait 2 sec after query $wait"
     //% pullUp.defl=true
@@ -39,7 +332,7 @@ namespace pksdriver {
     //% wait.defl=true
     //% blockExternalInputs=true
     //% weight=100
-    //% subcategory="Temperature and Humidity"
+    //% subcategory="Hydroponic"
     export function queryData(DHT: DHTtype, dataPin: DigitalPin, pullUp: boolean, serialOtput: boolean) {
 
         //initialize
@@ -147,7 +440,7 @@ namespace pksdriver {
     * Read humidity/temperature data from lastest query of DHT11/DHT22
     */
     //% weight=99
-    //% block="Read $data" subcategory="Temperature and Humidity"
+    //% block="Read $data" subcategory="Hydroponic"
     export function readData(data: dataType): number {
         return data == dataType.humidity ? _humidity : _temperature
     }
@@ -155,7 +448,7 @@ namespace pksdriver {
     /**
     * Select temperature type (Celsius/Fahrenheit)"
     */
-    //% block="Temperature type: $temp" subcategory="Temperature and Humidity"
+    //% block="Temperature type: $temp" subcategory="Hydroponic"
     //% weight=98
     export function selectTempType(temp: tempType) {
         _temptype = temp
@@ -164,7 +457,7 @@ namespace pksdriver {
     /**
     * Determind if last query is successful (checksum ok)
     */
-    //% block="Last query successful?" subcategory="Temperature and Humidity"
+    //% block="Last query successful?" subcategory="Hydroponic"
     //% weight=97
     export function readDataSuccessful(): boolean {
         return _readSuccessful
@@ -173,7 +466,7 @@ namespace pksdriver {
     /**
     * Determind if sensor responded successfully (not disconnected, etc) in last query
     */
-    //% block="Last query sensor responding?" subcategory="Temperature and Humidity"
+    //% block="Last query sensor responding?" subcategory="Hydroponic"
     //% weight=96
     export function sensorrResponding(): boolean {
         return _sensorresponding
@@ -181,7 +474,10 @@ namespace pksdriver {
 
 }
 
-//% weight=100 color=#A040E0 icon="\uf017" block="PKS drivers"
+//% weight=60
+//% color=#1c4980 
+//% icon="\uf2db" 
+//% block="PKS drivers"
 namespace pksdriver {
     let DS1302_REG_SECOND = 0x80
     let DS1302_REG_MINUTE = 0x82
@@ -191,7 +487,6 @@ namespace pksdriver {
     let DS1302_REG_WEEKDAY = 0x8A
     let DS1302_REG_YEAR = 0x8C
     let DS1302_REG_WP = 0x8E
-    let DS1302_REG_CTRL = 0x90
     let DS1302_REG_RAM = 0xC0
 
     /**
@@ -505,7 +800,7 @@ namespace pksdriver {
      * @param dio the DIO pin for DS1302, eg: DigitalPin.P14
      * @param cs the CS pin for DS1302, eg: DigitalPin.P15
      */
-    //% weight=200 blockGap=8
+    //% weight=95 blockGap=8
     //% blockId="DS1302_create" block="CLK %clk|DIO %dio|CS %cs" subcategory="Hydroponic"
     export function create(clk: DigitalPin, dio: DigitalPin, cs: DigitalPin): DS1302RTC {
         let ds = new DS1302RTC();
@@ -517,9 +812,7 @@ namespace pksdriver {
         return ds;
     }
 }
-/**
- * Enumeration of Axis (X, Y & Z)
- */
+
 enum axisXYZ {
     //% block="X"
     x,
@@ -529,10 +822,9 @@ enum axisXYZ {
     z
 }
 
-/**
- * Sensitivity of Accelerometer
- */
 enum accelSen {
+    // accelerometer sensitivity
+
     //% block="2g"
     range_2_g,
     //% block="4g"
@@ -543,10 +835,9 @@ enum accelSen {
     range_16_g
 }
 
-/**
- * Sensitivity of Gyroscope
- */
 enum gyroSen {
+    // gyroscope sensitivite
+
     //% block="250dps"
     range_250_dps,
     //% block="500dps"
@@ -557,7 +848,10 @@ enum gyroSen {
     range_2000_dps
 }
 
-//% color="#FFBF00" icon="\uf12e" weight=60 block="PKS drivers"
+//% weight=60
+//% color=#1c4980 
+//% icon="\uf2db" 
+//% block="PKS drivers"
 namespace pksdriver {
     let i2cAddress = 0x68;
     let power_mgmt = 0x6b;
@@ -768,414 +1062,3 @@ namespace pksdriver {
         return yaw_ang;
     }
 }
-
-//% weight=60 color=#1c4980 icon="\ue5eb" block="PKS drivers"
-namespace pksdriver {
-    const PCA9685_ADDRESS = 0x40
-    const MODE1 = 0x00
-    const MODE2 = 0x01
-    const SUBADR1 = 0x02
-    const SUBADR2 = 0x03
-    const SUBADR3 = 0x04
-    const PRESCALE = 0xFE
-    const LED0_ON_L = 0x06
-    const LED0_ON_H = 0x07
-    const LED0_OFF_L = 0x08
-    const LED0_OFF_H = 0x09
-    const ALL_LED_ON_L = 0xFA
-    const ALL_LED_ON_H = 0xFB
-    const ALL_LED_OFF_L = 0xFC
-    const ALL_LED_OFF_H = 0xFD
-
-    const STP_CHA_L = 2047
-    const STP_CHA_H = 4095
-
-    const STP_CHB_L = 1
-    const STP_CHB_H = 2047
-
-    const STP_CHC_L = 1023
-    const STP_CHC_H = 3071
-
-    const STP_CHD_L = 3071
-    const STP_CHD_H = 1023
-
-
-    const BYG_CHA_L = 3071
-    const BYG_CHA_H = 1023
-
-    const BYG_CHB_L = 1023
-    const BYG_CHB_H = 3071
-
-    const BYG_CHC_L = 4095
-    const BYG_CHC_H = 2047
-
-    const BYG_CHD_L = 2047
-    const BYG_CHD_H = 4095
-
-    /**
-     * The user can choose the step motor model.
-     */
-    export enum Stepper {
-        //% block="42"
-        Ste1 = 1,
-        //% block="28"
-        Ste2 = 2
-    }
-
-    /**
-     * The user can select the 8 steering gear controller.
-     */
-    export enum Servos {
-        S1 = 0x08,
-        S2 = 0x07,
-        S3 = 0x06,
-        S4 = 0x05,
-        S5 = 0x04,
-        S6 = 0x03,
-        S7 = 0x02,
-        S8 = 0x01
-    }
-
-    /**
-     * The user selects the 4-way dc motor.
-     */
-    export enum Motors {
-        M1 = 0x1,
-        M2 = 0x2,
-        M3 = 0x3,
-        M4 = 0x4
-    }
-
-    /**
-     * The user defines the motor rotation direction.
-     */
-    export enum Dir {
-        //% blockId="CW" block="CW"
-        CW = 1,
-        //% blockId="CCW" block="CCW"
-        CCW = -1,
-    }
-
-    /**
-     * The user can select a two-path stepper motor controller.
-     */
-    export enum Steppers {
-        M1_M2 = 0x1,
-        M3_M4 = 0x2
-    }
-
-
-
-    let initialized = false
-
-    function i2cWrite(addr: number, reg: number, value: number) {
-        let buf = pins.createBuffer(2)
-        buf[0] = reg
-        buf[1] = value
-        pins.i2cWriteBuffer(addr, buf)
-    }
-
-    function i2cCmd(addr: number, value: number) {
-        let buf = pins.createBuffer(1)
-        buf[0] = value
-        pins.i2cWriteBuffer(addr, buf)
-    }
-
-    function i2cRead(addr: number, reg: number) {
-        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
-        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
-        return val;
-    }
-
-    function initPCA9685(): void {
-        i2cWrite(PCA9685_ADDRESS, MODE1, 0x00)
-        setFreq(50);
-        initialized = true
-    }
-
-    function setFreq(freq: number): void {
-        // Constrain the frequency
-        let prescaleval = 25000000;
-        prescaleval /= 4096;
-        prescaleval /= freq;
-        prescaleval -= 1;
-        let prescale = prescaleval;//Math.floor(prescaleval + 0.5);
-        let oldmode = i2cRead(PCA9685_ADDRESS, MODE1);
-        let newmode = (oldmode & 0x7F) | 0x10; // sleep
-        i2cWrite(PCA9685_ADDRESS, MODE1, newmode); // go to sleep
-        i2cWrite(PCA9685_ADDRESS, PRESCALE, prescale); // set the prescaler
-        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode);
-        control.waitMicros(5000);
-        i2cWrite(PCA9685_ADDRESS, MODE1, oldmode | 0xa1);
-    }
-
-    function setPwm(channel: number, on: number, off: number): void {
-        if (channel < 0 || channel > 15)
-            return;
-
-        let buf = pins.createBuffer(5);
-        buf[0] = LED0_ON_L + 4 * channel;
-        buf[1] = on & 0xff;
-        buf[2] = (on >> 8) & 0xff;
-        buf[3] = off & 0xff;
-        buf[4] = (off >> 8) & 0xff;
-        pins.i2cWriteBuffer(PCA9685_ADDRESS, buf);
-    }
-
-
-    function setStepper_28(index: number, dir: boolean): void {
-        if (index == 1) {
-            if (dir) {
-                setPwm(4, STP_CHA_L, STP_CHA_H);
-                setPwm(6, STP_CHB_L, STP_CHB_H);
-                setPwm(5, STP_CHC_L, STP_CHC_H);
-                setPwm(7, STP_CHD_L, STP_CHD_H);
-            } else {
-                setPwm(7, STP_CHA_L, STP_CHA_H);
-                setPwm(5, STP_CHB_L, STP_CHB_H);
-                setPwm(6, STP_CHC_L, STP_CHC_H);
-                setPwm(4, STP_CHD_L, STP_CHD_H);
-            }
-        } else {
-            if (dir) {
-                setPwm(0, STP_CHA_L, STP_CHA_H);
-                setPwm(2, STP_CHB_L, STP_CHB_H);
-                setPwm(1, STP_CHC_L, STP_CHC_H);
-                setPwm(3, STP_CHD_L, STP_CHD_H);
-            } else {
-                setPwm(3, STP_CHA_L, STP_CHA_H);
-                setPwm(1, STP_CHB_L, STP_CHB_H);
-                setPwm(2, STP_CHC_L, STP_CHC_H);
-                setPwm(0, STP_CHD_L, STP_CHD_H);
-            }
-        }
-    }
-
-
-    function setStepper_42(index: number, dir: boolean): void {
-        if (index == 1) {
-            if (dir) {
-                setPwm(7, BYG_CHA_L, BYG_CHA_H);
-                setPwm(6, BYG_CHB_L, BYG_CHB_H);
-                setPwm(5, BYG_CHC_L, BYG_CHC_H);
-                setPwm(4, BYG_CHD_L, BYG_CHD_H);
-            } else {
-                setPwm(7, BYG_CHC_L, BYG_CHC_H);
-                setPwm(6, BYG_CHD_L, BYG_CHD_H);
-                setPwm(5, BYG_CHA_L, BYG_CHA_H);
-                setPwm(4, BYG_CHB_L, BYG_CHB_H);
-            }
-        } else {
-            if (dir) {
-                setPwm(3, BYG_CHA_L, BYG_CHA_H);
-                setPwm(2, BYG_CHB_L, BYG_CHB_H);
-                setPwm(1, BYG_CHC_L, BYG_CHC_H);
-                setPwm(0, BYG_CHD_L, BYG_CHD_H);
-            } else {
-                setPwm(3, BYG_CHC_L, BYG_CHC_H);
-                setPwm(2, BYG_CHD_L, BYG_CHD_H);
-                setPwm(1, BYG_CHA_L, BYG_CHA_H);
-                setPwm(0, BYG_CHB_L, BYG_CHB_H);
-            }
-        }
-    }
-
-
-    /**
-     * Steering gear control function.
-     * S1~S8.
-     * 0°~180°.
-    */
-    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="micro:bit Shield"
-    //% weight=100
-    //% degree.min=0 degree.max=180
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function servo(index: Servos, degree: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        // 50hz
-        let v_us = (degree * 1800 / 180 + 600) // 0.6ms ~ 2.4ms
-        let value = v_us * 4096 / 20000
-        setPwm(index + 7, 0, value)
-    }
-
-    /**
-     * set servo off
-    */
-    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="micro:bit Shield"
-    //% weight=99
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function servoOff(index: Servos): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        setPwm(index + 7, 0, 0)
-    }
-
-    /**
-     * set servo on
-    */
-    //% blockId=motor_servoOn block="ServoOn|%index" subcategory="micro:bit Shield"
-    //% weight=98
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
-    export function servoOn(index: Servos): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        setPwm(index + 7, 0, 150)
-    }
-
-    /**
-     * Execute a motor
-     * M1~M4.
-     * speed(0~255).
-    */
-    //% weight=130
-    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="micro:bit Shield"
-    //% speed.min=0 speed.max=255
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
-    export function MotorRun(index: Motors, direction: Dir, speed: number): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        speed = speed * 16 * direction; // map 255 to 4096
-        if (speed >= 4096) {
-            speed = 4095
-        }
-        if (speed <= -4096) {
-            speed = -4095
-        }
-        if (index > 4 || index <= 0)
-            return
-        let pn = (4 - index) * 2
-        let pp = (4 - index) * 2 + 1
-        if (speed >= 0) {
-            setPwm(pp, 0, speed)
-            setPwm(pn, 0, 0)
-        } else {
-            setPwm(pp, 0, 0)
-            setPwm(pn, 0, -speed)
-        }
-    }
-
-    /**
-     * Stop the dc motor.
-    */
-    //% weight=129
-    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="micro:bit Shield"
-    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function motorStop(index: Motors) {
-        setPwm((4 - index) * 2, 0, 0);
-        setPwm((4 - index) * 2 + 1, 0, 0);
-    }
-
-    /**
-     * Stop all motors
-    */
-    //% weight=128
-    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="micro:bit Shield"
-    export function motorStopAll(): void {
-        for (let idx = 1; idx <= 4; idx++) {
-            motorStop(idx);
-        }
-    }
-
-    //% weight=90
-    //% blockId=light_lighton block="Light On|%index" subcategory="micro:bit Shield"
-    export function LightOn(index: Motors): void {
-        if (!initialized) {
-            initPCA9685()
-        }
-        let speed = 255
-        speed = speed * 16 * 1; // map 255 to 4096
-        if (speed >= 4096) {
-            speed = 4095
-        }
-        if (speed <= -4096) {
-            speed = -4095
-        }
-        if (index > 4 || index <= 0)
-            return
-        let pn = (4 - index) * 2
-        let pp = (4 - index) * 2 + 1
-        if (speed >= 0) {
-            setPwm(pp, 0, speed)
-            setPwm(pn, 0, 0)
-        } else {
-            setPwm(pp, 0, 0)
-            setPwm(pn, 0, -speed)
-        }
-    }
-
-    //% weight=90
-    //% blockId=light_lightoff block="Light Off|%index" subcategory="micro:bit Shield"
-    export function LightOff(index: Motors) {
-        setPwm((4 - index) * 2, 0, 0);
-        setPwm((4 - index) * 2 + 1, 0, 0);
-    }
-
-    export enum compoundEyeData {
-        //% block="eye_1"
-        ir_1,
-        //% block="eye_2"
-        ir_2,
-        //% block="eye_3"
-        ir_3,
-        //% block="eye_4"
-        ir_4,
-        //% block="eye_5"
-        ir_5,
-        //% block="eye_6"
-        ir_6,
-        //% block="eye_7"
-        ir_7,
-        //% block="eye_8"
-        ir_8,
-        //% block="eye_9"
-        ir_9,
-        //% block="eye_10"
-        ir_10,
-        //% block="eye_11"
-        ir_11,
-        //% block="eye_12"
-        ir_12,
-        //% block="max_eye_value"
-        //% weight=99
-        max_eye_value,
-        //% block="max_eye"
-        //% weight=100
-        max_eye,
-        //% block="angle"
-        //% weight=98
-        angle,
-        //% block="mode"
-        mode,
-    }
-
-    /**
-    * compoundEye read function
-    */
-    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="micro:bit Shield"
-    //% weight=50
-    export function compoundEyeRead(compound_eye_data: compoundEyeData): number {
-        pins.i2cWriteNumber(
-            0x13,
-            compound_eye_data,
-            NumberFormat.UInt8LE,
-            false
-        )
-        let temp = pins.i2cReadNumber(0x13, NumberFormat.UInt8LE, false);
-        if (temp == 255) {
-            return -1;
-        } else if (compound_eye_data == compoundEyeData.angle) {
-            temp *= 2;
-        } else if (compound_eye_data == compoundEyeData.max_eye) {
-            temp += 1;
-        }
-        return temp;
-    }
-
-}
-
