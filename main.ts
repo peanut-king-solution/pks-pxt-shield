@@ -97,7 +97,7 @@ namespace pksdriver {
      * S1~S8.
      * 0°~180°.
     */
-    //% blockId=motor_servo block="Servo|%index|degree|%degree" subcategory="Robot"
+    //% blockId=motor_servo block="servo|%index|degree|%degree" subcategory="Robot"
     //% weight=100
     //% degree.min=0 degree.max=180
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
@@ -114,7 +114,7 @@ namespace pksdriver {
     /**
      * set servo off
     */
-    //% blockId=motor_servoOff block="ServoOff|%index" subcategory="Robot"
+    //% blockId=motor_servoOff block="servo off|%index" subcategory="Robot"
     //% weight=99
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOff(index: Servos): void {
@@ -127,7 +127,7 @@ namespace pksdriver {
     /**
      * set servo on
     */
-    //% blockId=motor_servoOn block="ServoOn|%index" subcategory="Robot"
+    //% blockId=motor_servoOn block="servo on|%index" subcategory="Robot"
     //% weight=98
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=4
     export function servoOn(index: Servos): void {
@@ -143,7 +143,7 @@ namespace pksdriver {
      * speed(0~255).
     */
     //% weight=130
-    //% blockId=motor_MotorRun block="Motor|%index|dir|%Dir|speed|%speed" subcategory="Robot"
+    //% blockId=motor_MotorRun block="motor|%index|dir|%Dir|speed|%speed" subcategory="Robot"
     //% speed.min=0 speed.max=255
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     //% direction.fieldEditor="gridpicker" direction.fieldOptions.columns=2
@@ -175,7 +175,7 @@ namespace pksdriver {
      * Stop the dc motor.
     */
     //% weight=129
-    //% blockId=motor_motorStop block="Motor stop|%index" subcategory="Robot"
+    //% blockId=motor_motorStop block="motor stop|%index" subcategory="Robot"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function motorStop(index: Motors) {
         setPwm((4 - index) * 2, 0, 0);
@@ -186,7 +186,7 @@ namespace pksdriver {
      * Stop all motors
     */
     //% weight=128
-    //% blockId=motor_motorStopAll block="Motor Stop All" subcategory="Robot"
+    //% blockId=motor_motorStopAll block="motor stop all" subcategory="Robot"
     export function motorStopAll(): void {
         for (let idx = 1; idx <= 4; idx++) {
             motorStop(idx);
@@ -194,7 +194,7 @@ namespace pksdriver {
     }
 
     //% weight=90
-    //% blockId=light_lighton block="Light On|%index" subcategory="Robot"
+    //% blockId=light_lighton block="light on|%index" subcategory="Robot"
     export function LightOn(index: Motors): void {
         if (!initialized) {
             initPCA9685()
@@ -221,7 +221,7 @@ namespace pksdriver {
     }
 
     //% weight=90
-    //% blockId=light_lightoff block="Light Off|%index" subcategory="Robot"
+    //% blockId=light_lightoff block="light off|%index" subcategory="Robot"
     export function LightOff(index: Motors) {
         setPwm((4 - index) * 2, 0, 0);
         setPwm((4 - index) * 2 + 1, 0, 0);
@@ -268,7 +268,7 @@ namespace pksdriver {
     /**
     * compoundEye read function
     */
-    //% blockId=compoundEye block="CompoundEye $compound_eye_data"  subcategory="Robot"
+    //% blockId=compoundEye block="compound eye $compound_eye_data"  subcategory="Robot"
     //% weight=50
     export function compoundEyeRead(compound_eye_data: compoundEyeData): number {
         pins.i2cWriteNumber(
@@ -320,9 +320,9 @@ namespace pksdriver {
     /**
     * Query data from DHT11/DHT22 sensor. It is also recommended to wait 1 (DHT11) or 2 (DHT22) seconds between each query.
     */
-    //% block="Query $DHT|Data pin $dataPin|Pin pull up $pullUp|Serial output $serialOtput|Wait 2 sec after query $wait"
+    //% block="query $DHT|data pin $dataPin|pin pull up $pullUp|serial output $serialOutput|wait 2 sec after query $wait"
     //% pullUp.defl=true
-    //% serialOtput.defl=false
+    //% serialOutput.defl=false
     //% wait.defl=true
     //% blockExternalInputs=true
     //% weight=100
@@ -432,7 +432,7 @@ namespace pksdriver {
     * Read humidity/temperature data from lastest query of DHT11/DHT22
     */
     //% weight=99
-    //% block="Read $data" subcategory="Hydroponic"
+    //% block="read $data" subcategory="Hydroponic"
     export function readData(data: dataType): number {
         return data == dataType.humidity ? _humidity : _temperature
     }
@@ -440,7 +440,7 @@ namespace pksdriver {
     /**
     * Select temperature type (Celsius/Fahrenheit)"
     */
-    //% block="Temperature type: $temp" subcategory="Hydroponic"
+    //% block="temperature type: $temp" subcategory="Hydroponic"
     //% weight=98
     export function selectTempType(temp: tempType) {
         _temptype = temp
@@ -449,7 +449,7 @@ namespace pksdriver {
     /**
     * Determind if last query is successful (checksum ok)
     */
-    //% block="Last query successful?" subcategory="Hydroponic"
+    //% block="last query successful?" subcategory="Hydroponic"
     //% weight=97
     export function readDataSuccessful(): boolean {
         return _readSuccessful
@@ -458,7 +458,7 @@ namespace pksdriver {
     /**
     * Determind if sensor responded successfully (not disconnected, etc) in last query
     */
-    //% block="Last query sensor responding?" subcategory="Hydroponic"
+    //% block="last query sensor responding?" subcategory="Hydroponic"
     //% weight=96
     export function sensorrResponding(): boolean {
         return _sensorresponding
@@ -721,7 +721,7 @@ namespace pksdriver {
          * @param minute is the Minute will be set, eg: 0
          * @param second is the Second will be set, eg: 0
          */
-        //% blockId="DS1302_set_DateTime" block="%ds|set Date and Time: Year %year|Month %month|Day %day|WeekDay %weekday|Hour %hour|Minute %minute|Second %second" subcategory="Hydroponic"
+        //% blockId="DS1302_set_DateTime" block="%ds|set date and time: year %year|month %month|day %day|weekday %weekday|hour %hour|minute %minute|second %second" subcategory="Hydroponic"
         //% weight=50 blockGap=8
         //% parts="DS1302"
         //% year.min=2000 year.max=2100
@@ -941,7 +941,7 @@ namespace pksdriver {
     /**
      * Initialize MPU6050
      */
-    //% block="Initialize MPU6050" subcategory="Acceleration"
+    //% block="initialize MPU6050" subcategory="Acceleration"
     //% weight=100
     export function initMPU6050() {
         let buffer = pins.createBuffer(2);
@@ -953,7 +953,7 @@ namespace pksdriver {
     /**
       * Get gyroscope values
       */
-    //% block="Gyroscope value of %axisXYZ axis with %gyroSen sensitivity (Unit: rad/s)" subcategory="Acceleration"
+    //% block="gyroscope value of %axisXYZ axis with %gyroSen sensitivity (Unit: rad/s)" subcategory="Acceleration"
     //% weight=99
     export function gyroscope(axis: axisXYZ, sensitivity: gyroSen) {
         updateGyroscope(sensitivity);
@@ -971,7 +971,7 @@ namespace pksdriver {
     /**
      * Get rotation of the corresponding Axis
      */
-    //% block="Angle of %xaxisXYZ axis with %accelSen sensitivity (Unit: Degrees)" subcategory="Acceleration"
+    //% block="angle of %xaxisXYZ axis with %accelSen sensitivity (Unit: Degrees)" subcategory="Acceleration"
     //% weight=98
     export function axisRotation(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
@@ -996,7 +996,7 @@ namespace pksdriver {
     /**
      * Get acceleration of the corresponding Axis
      */
-    //% block="Acceleration of %xaxisXYZ axis with %accelSen sensitivity (Unit: g)" subcategory="Acceleration"
+    //% block="acceleration of %xaxisXYZ axis with %accelSen sensitivity (Unit: g)" subcategory="Acceleration"
     //% weight=97
     export function axisAcceleration(axis: axisXYZ, sensitivity: accelSen): number {
         updateAcceleration(sensitivity);
@@ -1015,7 +1015,7 @@ namespace pksdriver {
     /**
      * Get temperature
      */
-    //% block="Temperature (Unit: Celsius)" subcategory="Acceleration"
+    //% block="temperature (Unit: Celsius)" subcategory="Acceleration"
     //% weight=96
     export function readTemperature(): number {
         let rawTemp = readData(tempAddr);
