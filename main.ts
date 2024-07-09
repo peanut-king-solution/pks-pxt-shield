@@ -1075,8 +1075,10 @@ namespace pksdriver {
     /**
     * Setup/reset MAX7219s. If you are using 4-in-1 module you'll need to set rotation as true. If your chain are consisted of single modules set it as false (default).
     */
-    //% block="Setup MAX7219:|Number of matrixs $num|CS(LOAD) = $cs|MOSI(DIN) = $mosi|MISO(not used) = $miso|SCK(CLK) = $sck"
-    //% num.min=1 num.defl=1 cs.defl=DigitalPin.P16 mosi.defl=DigitalPin.P15 miso.defl=DigitalPin.P14 sck.defl=DigitalPin.P13 rotate.defl=false group="1. Setup"
+    //% block="Setup MAX7219:|Number of matrixs $num|CS(LOAD) = $cs|MOSI(DIN) = $mosi|MISO(not used) = $miso|SCK(CLK) = $sck" 
+    //% subcategory="Dot Matrix"
+    //% weight=200
+    //% num.min=1 num.defl=1 cs.defl=DigitalPin.P16 mosi.defl=DigitalPin.P15 miso.defl=DigitalPin.P14 sck.defl=DigitalPin.P13 rotate.defl=false
     export function setup(num: number, cs: DigitalPin, mosi: DigitalPin, miso: DigitalPin, sck: DigitalPin) {
         // set internal variables        
         _pinCS = cs
@@ -1100,7 +1102,8 @@ namespace pksdriver {
     /**
     * Rotation/reverse order options for 4-in-1 MAX7219 modules
     */
-    //% block="Rotate matrix display $rotation|Reverse printing order $reversed" rotation.defl=rotation_direction.none group="1. Setup" blockExternalInputs=true advanced=true
+    //% block="Rotate matrix display $rotation|Reverse printing order $reversed" rotation.defl=rotation_direction.none blockExternalInputs=true    
+    //% subcategory="Dot Matrix"
     export function for_4_in_1_modules(rotation: rotation_direction, reversed: boolean) {
         _rotation = rotation
         _reversed = reversed
@@ -1192,7 +1195,8 @@ namespace pksdriver {
     /**
     * Scroll a text accross all MAX7219 matrixs for once
     */
-    //% block="Scroll text $text|delay (ms) $delay|at the end wait (ms) $endDelay" text.defl="Hello world!" delay.min=0 delay.defl=75 endDelay.min=0 endDelay.defl=500 group="2. Display text on matrixs" blockExternalInputs=true
+    //% block="Scroll text $text|delay (ms) $delay|at the end wait (ms) $endDelay" text.defl="Hello world!" delay.min=0 delay.defl=75 endDelay.min=0 endDelay.defl=500 blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function scrollText(text: string, delay: number, endDelay: number) {
         let printPosition = _displayArray.length - 8
         let characters_index: number[] = []
@@ -1258,7 +1262,8 @@ namespace pksdriver {
     /**
     * Print a text accross the chain of MAX7219 matrixs at a specific spot. Offset value -8 ~ last column of matrixs. You can choose to clear the screen or not (if not it can be used to print multiple string on the MAX7219 chain).
     */
-    //% block="Display text (align left) $text|offset $offset|clear screen first $clear" text.defl="Hi!" offset.min=-8 clear.defl=true group="2. Display text on matrixs" blockExternalInputs=true
+    //% block="Display text (align left) $text|offset $offset|clear screen first $clear" text.defl="Hi!" offset.min=-8 clear.defl=true blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function displayText(text: string, offset: number, clear: boolean) {
         // clear screen and array if needed
         if (clear) {
@@ -1307,7 +1312,8 @@ namespace pksdriver {
     /**
     * Print a text on the chain of MAX7219 matrixs and automatically align to the right.
     */
-    //% block="Display text (align right) $text|clear screen first $clear" text.defl="Hi!" clear.defl=true group="2. Display text on matrixs" blockExternalInputs=true
+    //% block="Display text (align right) $text|clear screen first $clear" text.defl="Hi!" clear.defl=true blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function displayTextAlignRight(text: string, clear: boolean) {
         let len = 0
         for (let i = 0; i < text.length; i++) {
@@ -1320,7 +1326,8 @@ namespace pksdriver {
     /**
     * Print a custom character from a number array on the chain of MAX7219 matrixs at a specific spot. Each number in the array is 0-255, the decimal version of column's byte number. Offset value -8 ~ last column of matrixs. You can choose to clear the screen or not (if not it can be used to print multiple string on the MAX7219 chain).
     */
-    //% block="Display custom character from|number array $customCharArray|offset $offset|clear screen first $clear" offset.min=-8 clear.defl=true group="2. Display text on matrixs" blockExternalInputs=true advanced=true
+    //% block="Display custom character from|number array $customCharArray|offset $offset|clear screen first $clear" offset.min=-8 clear.defl=true  blockExternalInputs=true 
+    //% subcategory="Dot Matrix"
     export function displayCustomCharacter(customCharArray: number[], offset: number, clear: boolean) {
         // clear screen and array if needed
         if (clear) {
@@ -1356,7 +1363,8 @@ namespace pksdriver {
     /**
     * Return a number array calculated from a 8x8 LED byte array (example: B00100000,B01000000,B10000110,B10000000,B10000000,B10000110,B01000000,B00100000)
     */
-    //% block="Get custom character number array|from byte-array string $text" text.defl="B00100000,B01000000,B10000110,B10000000,B10000000,B10000110,B01000000,B00100000" group="2. Display text on matrixs" blockExternalInputs=true advanced=true
+    //% block="Get custom character number array|from byte-array string $text" text.defl="B00100000,B01000000,B10000110,B10000000,B10000000,B10000110,B01000000,B00100000" blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function getCustomCharacterArray(text: string) {
         let tempTextArray: string[] = []
         let resultNumberArray: number[] = []
@@ -1397,8 +1405,7 @@ namespace pksdriver {
     //% block="Add custom character $chr|number array $customCharArray|to the extension font library"
     //% chr.defl=""
     //% blockExternalInputs=true
-    //% group="2. Display text on matrixs"
-    //% advanced=true
+    //% subcategory="Dot Matrix"
     export function addCustomChr(chr: string, customCharArray: number[]) {
         if (chr != null && chr.length == 1 && customCharArray != null) {
             // add new character
@@ -1410,7 +1417,8 @@ namespace pksdriver {
     /**
     * Display all fonts in the extension font library
     */
-    //% block="Display all fonts at delay $delay" delay.min=0 delay.defl=200 group="2. Display text on matrixs" advanced=true
+    //% block="Display all fonts at delay $delay" delay.min=0 delay.defl=200 
+    //% subcategory="Dot Matrix"
     export function fontDemo(delay: number) {
         let offsetIndex = 0
         clearAll()
@@ -1432,7 +1440,8 @@ namespace pksdriver {
     /**
     * Turn on or off all MAX7219s
     */
-    //% block="Turn on all matrixs $status" status.defl=true group="3. Basic light control" advanced=true
+    //% block="Turn on all matrixs $status" status.defl=true 
+    //% subcategory="Dot Matrix"
     export function togglePower(status: boolean) {
         if (status) _registerAll(_SHUTDOWN, 1)
         else _registerAll(_SHUTDOWN, 0)
@@ -1441,7 +1450,8 @@ namespace pksdriver {
     /**
     * Set brightness level of LEDs on all MAX7219s
     */
-    //% block="Set all brightness level $level" level.min=0 level.max=15 level.defl=15 group="3. Basic light control"
+    //% block="Set all brightness level $level" level.min=0 level.max=15 level.defl=15 
+    //% subcategory="Dot Matrix"
     export function brightnessAll(level: number) {
         _registerAll(_INTENSITY, level)
     }
@@ -1449,7 +1459,8 @@ namespace pksdriver {
     /**
     * Set brightness level of LEDs on a specific MAX7219s (index 0=farthest on the chain)
     */
-    //% block="Set brightness level $level on matrix index = $index" level.min=0 level.max=15 level.defl=15 index.min=0 group="3. Basic light control" advanced=true
+    //% block="Set brightness level $level on matrix index = $index" level.min=0 level.max=15 level.defl=15 index.min=0 
+    //% subcategory="Dot Matrix"
     export function brightnessForOne(level: number, index: number) {
         _registerForOne(_INTENSITY, level, index)
     }
@@ -1457,7 +1468,8 @@ namespace pksdriver {
     /**
     * Turn on all LEDs on all MAX7219s
     */
-    //% block="Fill all LEDs" group="3. Basic light control"
+    //% block="Fill all LEDs"
+    //% subcategory="Dot Matrix"
     export function fillAll() {
         for (let i = 0; i < 8; i++) _registerAll(_DIGIT[i], 255)
     }
@@ -1465,7 +1477,8 @@ namespace pksdriver {
     /**
     * Turn on LEDs on a specific MAX7219
     */
-    //% block="Fill LEDs on matrix index = $index" index.min=0 group="3. Basic light control" advanced=true
+    //% block="Fill LEDs on matrix index = $index" index.min=0 
+    //% subcategory="Dot Matrix"
     export function fillForOne(index: number) {
         for (let i = 0; i < 8; i++) _registerForOne(_DIGIT[i], 255, index)
     }
@@ -1473,7 +1486,8 @@ namespace pksdriver {
     /**
     * Turn off LEDs on all MAX7219s
     */
-    //% block="Clear all LEDs" group="3. Basic light control"
+    //% block="Clear all LEDs" 
+    //% subcategory="Dot Matrix"
     export function clearAll() {
         for (let i = 0; i < 8; i++) _registerAll(_DIGIT[i], 0)
     }
@@ -1481,7 +1495,8 @@ namespace pksdriver {
     /**
     * Turn off LEDs on a specific MAX7219 (index 0=farthest on the chain)
     */
-    //% block="Clear LEDs on matrix index = $index" index.min=0 group="3. Basic light control" advanced=true
+    //% block="Clear LEDs on matrix index = $index" index.min=0 
+    //% subcategory="Dot Matrix"
     export function clearForOne(index: number) {
         for (let i = 0; i < 8; i++) _registerForOne(_DIGIT[i], 0, index)
     }
@@ -1489,7 +1504,8 @@ namespace pksdriver {
     /**
     * Turn on LEDs randomly on all MAX7219s
     */
-    //% block="Randomize all LEDs" index.min=0 group="3. Basic light control"
+    //% block="Randomize all LEDs" index.min=0 
+    //% subcategory="Dot Matrix"
     export function randomizeAll() {
         for (let i = 0; i < 8; i++) _registerAll(_DIGIT[i], Math.randomRange(0, 255))
     }
@@ -1497,7 +1513,8 @@ namespace pksdriver {
     /**
     * Turn on LEDs randomly on a specific MAX7219 (index 0=farthest on the chain)
     */
-    //% block="Randomize LEDs on matrix index = $index" index.min=0 group="3. Basic light control" advanced=true
+    //% block="Randomize LEDs on matrix index = $index" index.min=0 
+    //% subcategory="Dot Matrix"
     export function randomizeForOne(index: number) {
         for (let i = 0; i < 8; i++) _registerForOne(_DIGIT[i], Math.randomRange(0, 255), index)
     }
@@ -1505,7 +1522,8 @@ namespace pksdriver {
     /**
     * Set LEDs of all MAX7219s to a pattern from a 8x8 matrix variable (index 0=farthest on the chain)
     */
-    //% block="Display 8x8 pattern $newMatrix on all matrixs" group="4. Set custom LED pattern on matrixs" advanced=true
+    //% block="Display 8x8 pattern $newMatrix on all matrixs" 
+    //% subcategory="Dot Matrix"
     export function displayLEDsToAll(newMatrix: number[][]) {
         let columnValue = 0
         if (newMatrix != null) {
@@ -1528,7 +1546,8 @@ namespace pksdriver {
     /**
     * Set LEDs of a specific MAX7219s to a pattern from a 8x8 number matrix variable (index 0=farthest on the chain)
     */
-    //% block="Display 8x8 pattern $newMatrix|on matrix index = $index" index.min=0 blockExternalInputs=true group="4. Set custom LED pattern on matrixs"
+    //% block="Display 8x8 pattern $newMatrix|on matrix index = $index" index.min=0 blockExternalInputs=true 
+    //% subcategory="Dot Matrix"
     export function displayLEDsForOne(newMatrix: number[][], index: number) {
         let columnValue = 0
         if (newMatrix != null) {
@@ -1551,7 +1570,8 @@ namespace pksdriver {
     /**
     * Return a empty 8x8 number matrix variable
     */
-    //% block="Empty 8x8 pattern" group="4. Set custom LED pattern on matrixs"
+    //% block="Empty 8x8 pattern" 
+    //% subcategory="Dot Matrix"
     export function getEmptyMatrix() {
         return [
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -1568,7 +1588,8 @@ namespace pksdriver {
     /**
     * Return a full 8x8 number matrix variable
     */
-    //% block="Full 8x8 pattern" group="4. Set custom LED pattern on matrixs" advanced=true
+    //% block="Full 8x8 pattern" 
+    //% subcategory="Dot Matrix"
     export function getFullMatrix() {
         return [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -1585,7 +1606,8 @@ namespace pksdriver {
     /**
     * Return a specific value from a 8x8 number matrix variable
     */
-    //% block="Get value from 8x8 pattern %matrix|x = $x y = $y" x.min=0 x.max=7 y.min=0 y.max=7 group="4. Set custom LED pattern on matrixs" blockExternalInputs=true advanced=true
+    //% block="Get value from 8x8 pattern %matrix|x = $x y = $y" x.min=0 x.max=7 y.min=0 y.max=7 blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function getValueFromMatrix(matrix: number[][], x: number, y: number) {
         return matrix[x][y]
     }
@@ -1593,7 +1615,8 @@ namespace pksdriver {
     /**
     * Set a specific value in a 8x8 number matrix variable
     */
-    //% block="Set 8x8 pattern %matrix|x = $x y = $y value to $value" value.min=0 value.max=1 x.min=0 x.max=7 y.min=0 y.max=7 group="4. Set custom LED pattern on matrixs" blockExternalInputs=true
+    //% block="Set 8x8 pattern %matrix|x = $x y = $y value to $value" value.min=0 value.max=1 x.min=0 x.max=7 y.min=0 y.max=7 blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function setValueInMatrix(matrix: number[][], x: number, y: number, value: number) {
         matrix[x][y] = value
     }
@@ -1601,7 +1624,8 @@ namespace pksdriver {
     /**
     * Toggle (between 0/1) a specific value in a 8x8 number matrix variable
     */
-    //% block="Toogle value in 8x8 pattern %matrix|x = $x y = $y" x.min=0 x.max=7 y.min=0 y.max=7 group="4. Set custom LED pattern on matrixs" blockExternalInputs=true advanced=true
+    //% block="Toogle value in 8x8 pattern %matrix|x = $x y = $y" x.min=0 x.max=7 y.min=0 y.max=7 blockExternalInputs=true
+    //% subcategory="Dot Matrix"
     export function toogleValueInMatrix(matrix: number[][], x: number, y: number) {
         if (matrix[x][y] == 1) matrix[x][y] = 0
         else if (matrix[x][y] == 0) matrix[x][y] = 1
